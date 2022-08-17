@@ -40,7 +40,7 @@ def fixed_to_float(fixed: str) -> Aftercare:
     2022-08-18 00:00:00      226.068
     """
 
-    def aftercare(s: pd.Series, tsid: int) -> pd.Series:
+    def aftercare(s: pd.Series, *args) -> pd.Series:
         return s.tz_convert(fixed).tz_localize(None)
 
     return aftercare
@@ -51,14 +51,14 @@ def cet_to_float(target_tsid: Union[int, Iterable[int]]) -> Aftercare:
 
 
 def cet_to_Berlin() -> Aftercare:
-    def aftercare(s: pd.Series, tsid: int) -> pd.Series:
+    def aftercare(s: pd.Series, *args) -> pd.Series:
         return s.tz_convert("+01:00").tz_localize(None).tz_convert("Europe/Berlin")
 
     return aftercare
 
 
 def standardize_belvis(tz) -> Aftercare:
-    def aftercare(s: pd.Series, tsid: int) -> pd.Series:
+    def aftercare(s: pd.Series, *args) -> pd.Series:
         td = s.index[1] - s.index[0]
         if td <= dt.timedelta(hours=2):
             bound = "right"

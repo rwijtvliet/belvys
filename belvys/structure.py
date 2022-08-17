@@ -4,24 +4,32 @@ import pathlib
 from dataclasses import dataclass, field
 from typing import Any, Dict, Iterable, Union
 
+import pandas as pd
 import yaml
 
 TsNameTree = Union[str, Iterable[str], Dict[str, "TsNameTree"]]
-TsIdTree = Union[int, Iterable[int], Dict[str, "TsIdTree"]]
-
-
-import pandas as pd
 
 
 @dataclass
-class Timeseries:
-    pdid: str
+class Ts:
+    pfid: str
     name: str
     tsid: int = None
     series: pd.Series = None
 
 
-TimeTree = Union[Timeseries, Iterable[Timeseries], Dict[str, "TimeTree"]]
+TsTree = Union[Ts, Iterable[Ts], Dict[str, "TsTree"]]
+
+
+def create_tstree(pfid: str, tsname_tree: TsNameTree) -> TsTree:
+    if isinstance(tsname_tree, Dict):
+        return {k: create_tstree(pfid, subtree) for k, subtree in tsname_tree.items()}
+    elif isinstance(tsname_tree, str):
+        tsname = tsname_tree
+        return [Ts(pfid, tsname)]
+    elif isinstance(tsname_tree, Iterable):
+        tsnames = tsname_tree
+        return [Ts(pfid, tsname) for tsname in tsnames]
 
 
 @dataclass
@@ -161,8 +169,8 @@ class Structure:
         conf_yml = yaml.load(open(filepath), Loader=yaml.FullLoader)
         return cls(**conf_yml)
 
-    def tsname_tree(self, pfid: str, pflineid: str) -> TsNameTree:
-        """Timeseries that must be fetched to get the wanted pflineid for a given (original) pfid.
+    def tstree_pfline(self, pfid: str, pflineid: str) -> TsTree:
+        """Timeseries that must be fetched to get the wanted pflineid for a given pfid.
 
         Parameters
         ----------
@@ -173,31 +181,48 @@ class Structure:
 
         Returns
         -------
-        TsNameTree
+        TsTree
             Names of timeseries that must be fetched.
         """
-        if pfid not in self.portfolios.original:
-            raise ValueError(
-                "``pfid`` must be an 'original' portfolio that is present in Belvis, so "
-                f"one of {', '.join(self.portfolios.original)}."
-            )
+        if pfid not in (avail := self.available_pfids(True)):
+            raise ValueError(f"``pfid`` must one of {', '.join(avail)}.")
 
         # Use correction, if it exists.
-        corrected_tree = self.corrections.get(pfid, {}).get(pflineid, "notfound")
-        if corrected_tree is None:
+        tsname_tree = self.corrections.get(pfid, {}).get(pflineid, "notfound")
+        if tsname_tree is None:
             raise ValueError(
                 f"The portfolio line ({pflineid}) does not exists for this portfolio ({pfid})."
             )
-        elif corrected_tree != "notfound":
-            return corrected_tree
+        elif tsname_tree != "notfound":
+            return create_tstree(pfid, tsname_tree)
 
         # If not, use default.
-        default_tree = self.pflines.get(pflineid, None)
-        if default_tree is None:
+        tsname_tree = self.pflines.get(pflineid, None)
+        if tsname_tree is None:
             raise ValueError(
                 f"The portfolio line ({pflineid}) does not exists for this portfolio ({pfid})."
             )
-        return default_tree
+        return create_tstree(pfid, tsname_tree)
+
+    def tstree_price(self, priceid: str) -> TsTree:
+        """Timeseries that must be fetched to get the wanted price.
+
+        Parameters
+        ----------
+        priceid : str
+            Id of price.
+
+        Returns
+        -------
+        TsTree
+            Timeseries that must be fetched.
+        """
+        if priceid not in (avail := self.available_priceids()):
+            raise ValueError(f"``priceid`` must be one of {', '.join(avail)}.")
+
+        pfid = self.prices[priceid]["pfid"]
+        tsname_tree = self.prices[priceid]["tsnames"]
+        return create_tstree(pfid, tsname_tree)
 
     def available_pfids(self, original_only: bool = False) -> Iterable[str]:
         """All available portfolio ids.
