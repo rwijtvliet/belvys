@@ -1,0 +1,64 @@
+# Test if pfline expansion works on list of references.
+
+
+########
+# Header
+########
+
+tz: Europe/Berlin      
+freq: D
+
+#################
+# Portfolio lines
+#################
+
+pflines:
+
+  current_offtake: tsname1
+
+  expected_offtake: 
+  - tsname2
+  - tsname3
+
+  forward_sourced: 
+  - tsname4
+  - tsname5
+
+  sourced_by_market_1: forward_sourced #value should be replaced by class init
+  
+  sourced_by_market_2:
+    dayahead:
+    - tsname6
+    - tsname7
+    forward: forward_sourced # value should be replaced by class init
+
+  sourced_by_market_3:
+    layer1: sourced_by_market_2 # value should be replaced by class init
+
+############
+# Portfolios
+############
+
+portfolios:
+
+  original: 
+  - B2C_household
+  - B2C_Spot
+  - B2B_backtoback
+  - B2B_Spot
+
+########
+# Prices
+########
+
+prices:
+
+  fwc_monthly_DE:
+    pfid: Germany
+    tsnames: MPFC (THE)
+
+  fwc_daily_DE:
+    pfid: Germany
+    tsnames: 
+    - MPFC (THE)
+    - M2D profile

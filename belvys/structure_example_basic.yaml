@@ -1,0 +1,79 @@
+# Structure file to describe data in Belvis instance.
+# Comments are used to indicate the expected specification format.
+#
+# This is a *basic* exmaple, with only the most necessary data.
+
+########
+# Header
+########
+
+tz: Europe/Berlin 
+freq: D                 # frequency to convert all data into before returning
+
+#################
+# Portfolio lines
+#################
+
+pflines:
+
+# Here we define the portfolio lines we want to access for each portfolio. (We can make
+# portfolio-specific corrections further below.) The keys ("pfline ids") in this section
+# can be freely chosen; they point to timeseries names that exist in belvis.
+
+  current_offtake: Offtake volume in MW
+  # A pfline id can point to a single timeseries name. The unit of the timeseries is used 
+  # to determine what information we have. (In this case, assuming the name is sensible, 
+  # this is a volume timeseries, which is used to create a volume-only portfolio line).
+
+  expected_offtake: 
+  - Offtake volume in MW
+  - Expected churn in MW
+  # It can also point to a list of timeseries. In that case, timeseries with the same unit
+  # unit are added. In this case, we again obtain a volume-only portfolio line...
+
+  forward_sourced:
+  - Procurement forward volume in MW
+  - Procurement forward cost in EUR
+  # ...and in this case, due to the distinct units, a price-and-volume portfolio line.
+
+############
+# Portfolios
+############
+
+portfolios:
+
+# The portfolios we are interested in.
+# This section has one part "original", and possibly also a part "sythetic".
+
+  original: 
+  - B2C_household
+  - B2C_Spot
+  - B2B_backtoback
+  - B2B_Spot
+  # This is a list of portfolio ids that are present in belvis. The list elements are the
+  # portfolio ids (or "portfolio abbreviations", or "short names") as they are present in 
+  # belvis. 
+
+########
+# Prices
+########
+
+prices:
+
+# This section points to where market price timeseries are located in belvis.
+# The keys ("price ids") in this section can be freely chosen; each is a dictionary 
+# with keys 'pfid' and 'tsnames', indicating the belvis portfolio id and the timeseries 
+# name of the price timeseries. Just as above; we can specify a single timeseries, an array
+# of timeseries, or a nested structure.
+
+  fwc_monthly_DE:
+    pfid: Germany
+    tsnames: MPFC (THE)
+  # Just as above, we can specify a single timeseries...
+
+  fwc_daily_DE:
+    pfid: Germany
+    tsnames: 
+    - MPFC (THE)
+    - M2D profile
+  # ...or multiple ones, as long as they are in the same folder.

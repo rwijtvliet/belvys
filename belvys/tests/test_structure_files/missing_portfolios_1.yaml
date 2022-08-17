@@ -1,0 +1,46 @@
+########
+# Header
+########
+
+tz: Europe/Berlin 
+freq: D
+
+#################
+# Portfolio lines
+#################
+
+pflines:
+
+  current_offtake: Offtake volume in MW
+
+  expected_offtake: 
+  - Offtake volume in MW
+  - Expected churn in MW
+
+  forward_sourced:
+  - Procurement forward volume in MW
+  - Procurement forward cost in EUR
+
+############
+# Portfolios
+############
+
+portfolios:
+
+  original: 
+
+########
+# Prices
+########
+
+prices:
+
+  fwc_monthly_DE:
+    pfid: Germany
+    tsnames: MPFC (THE)
+
+  fwc_daily_DE:
+    pfid: Germany
+    tsnames: 
+    - MPFC (THE)
+    - M2D profile

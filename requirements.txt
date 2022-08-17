@@ -1,0 +1,8 @@
+PyYAML
+pandas
+numpy
+requests
+tqdm
+portfolyo
+python-forge
+versioneer

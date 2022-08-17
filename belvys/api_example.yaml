@@ -1,0 +1,12 @@
+########
+# Header
+########
+
+server: http://belvisserver:8040   # Server and port of the rest API. 
+tenant: pfm_power                  # Name of tenant on this server.
+
+#######
+# Cache
+#######
+
+cache: 

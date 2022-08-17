@@ -1,0 +1,101 @@
+########
+# Header
+########
+
+tz: Europe/Berlin 
+freq: D
+
+#################
+# Portfolio lines
+#################
+
+pflines:
+
+  current_offtake: Offtake volume in MW
+
+  expected_offtake: 
+  - Offtake volume in MW
+  - Expected churn in MW
+
+  forward_sourced:
+  - Procurement forward volume NCG in MW
+  - Procurement forward volume Gaspool in MW
+  - Procurement forward cost NCG in EUR
+  - Procurement forward cost Gaspool in EUR
+
+  sourced_by_market:
+    dayahead:
+    - Procurement dayahead volume in MW
+    - Procurement dayahead cost in EUR
+    forward: forward_sourced 
+
+  sourced_by_market_and_product:
+    dayahead:
+    - Procurement dayahead volume in MW
+    - Procurement dayahead cost in EUR
+    forward:
+      NCG:
+      - Procurement forward volume NCG in MW
+      - Procurement forward cost NCG in EUR
+      Gaspool:
+      - Procurement forward volume Gaspool in MW
+      - Procurement forward cost Gaspool in EUR
+
+############
+# Portfolios
+############
+
+portfolios:
+
+  original: 
+  - B2C_household
+  - B2C_Spot
+  - B2B_backtoback
+  - B2B_Spot
+
+  synthetic:
+    B2B_BtB: B2B_backtoback  
+    B2B_all: [B2B_backtoback, nonexisting]
+
+##########################################
+# Corrections: portfolio line vs portfolio 
+##########################################
+
+corrections: 
+
+  B2B_Spot: 
+
+    current_offtake:
+    - Initially contracted offtake volume in MW
+    - Additional churn due to price increase
+
+    expected_offtake: none
+
+
+  B2C_household:
+
+    high_offtake_scenario:
+    - expected_offtake
+    - offtake growth bull market
+
+########
+# Prices
+########
+
+prices:
+
+  fwc_monthly_DE:
+    pfid: Germany
+    tsnames: MPFC (THE)
+
+  fwc_daily_DE:
+    pfid: Germany
+    tsnames: 
+    - MPFC (THE)
+    - M2D profile
+
+  fwc_daily_DE_nested:
+    pfid: Germany
+    tsnames: 
+      monthly: MPFC (THE)
+      month_2_day: M2D profile

@@ -1,0 +1,40 @@
+########
+# Header
+########
+
+tz: Europe/Berlin 
+freq: D
+
+#################
+# Portfolio lines
+#################
+
+pflines:
+
+  current_offtake: Offtake volume in MW
+
+  expected_offtake: 
+  - Offtake volume in MW
+  - Expected churn in MW
+
+  forward_sourced:
+  - Procurement forward volume in MW
+  - Procurement forward cost in EUR
+
+############
+# Portfolios
+############
+
+portfolios:
+
+  original: 
+  - B2C_household
+  - B2C_Spot
+  - B2B_backtoback
+  - B2B_Spot
+
+########
+# Prices
+########
+
+prices:

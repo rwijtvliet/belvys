@@ -1,0 +1,38 @@
+########
+# Header
+########
+
+tz: Europe/Berlin 
+freq: D
+
+#################
+# Portfolio lines
+#################
+
+############
+# Portfolios
+############
+
+portfolios:
+
+  original: 
+  - B2C_household
+  - B2C_Spot
+  - B2B_backtoback
+  - B2B_Spot
+
+########
+# Prices
+########
+
+prices:
+
+  fwc_monthly_DE:
+    pfid: Germany
+    tsnames: MPFC (THE)
+
+  fwc_daily_DE:
+    pfid: Germany
+    tsnames: 
+    - MPFC (THE)
+    - M2D profile
