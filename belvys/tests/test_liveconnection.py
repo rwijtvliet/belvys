@@ -52,15 +52,10 @@ def test_all_pflines(tenant: belvys.Tenant):
     # Pflines
     for pfid in tenant.structure.available_pfids():
         for pflineid in tenant.structure.available_pflineids(pfid):
-            # Low-level: get tsid numbers
-            tsid_trees = tenant._tsid_trees_pfline(pfid, pflineid)
-            # high-level: get portfolio linses
             print(pfid, pflineid)
-            pfl = tenant.portfolio_pfl(pfid, pflineid, ts_left, ts_right, True)
+            _ = tenant.portfolio_pfl(pfid, pflineid, ts_left, ts_right, True)
     # Prices
     for priceid in tenant.structure.available_priceids():
-        # low-level
-        tsid_tree = tenant._tsid_tree_price(priceid)
-        # high-level
-        pfl = tenant.price_pfl(priceid, ts_left, ts_right)
+        print(priceid)
+        _ = tenant.price_pfl(priceid, ts_left, ts_right)
     

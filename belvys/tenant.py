@@ -108,7 +108,7 @@ class Tenant:
         for pfid in set([*pfids_1, *pfids_2]):
             _ = self.api.all_ts(pfid)
 
-    def _add_series(self, ts_tree: TsTree, ts_left, ts_right, **kwargs) -> None:
+    def _fetch_series(self, ts_tree: TsTree, ts_left, ts_right, **kwargs) -> None:
         if isinstance(ts_tree, Ts):
             ts = ts_tree
             if ts.tsid is None:
@@ -116,10 +116,10 @@ class Tenant:
             ts.series = self.api.series(ts.tsid, ts_left, ts_right, **kwargs)
         if isinstance(ts_tree, Dict):
             for subtree in ts_tree.values():
-                self._add_series(subtree, ts_left, ts_right, **kwargs)
+                self._fetch_series(subtree, ts_left, ts_right, **kwargs)
         elif isinstance(ts_tree, Iterable):  # Must be after Dict
             for branch in ts_tree:
-                self._add_series(branch, ts_left, ts_right, **kwargs)
+                self._fetch_series(branch, ts_left, ts_right, **kwargs)
 
     def _pfline(self, ts_tree: TsTree) -> pf.PfLine:
         """Create a portfolio line from the data stored in the ts_tree series."""
@@ -191,7 +191,7 @@ class Tenant:
         ts_trees = []
         for pfid in self.structure.to_original_pfids(pfid):
             ts_tree = self.structure.tstree_pfline(pfid, pflineid)
-            self._add_series(ts_tree, ts_left, ts_right, missing2zero=missing2zero)
+            self._fetch_series(ts_tree, ts_left, ts_right, missing2zero=missing2zero)
             ts_trees.append(ts_tree)
         if debug:
             return ts_trees
@@ -232,7 +232,7 @@ class Tenant:
         ts_left, ts_right = pf.ts_leftright(ts_left, ts_right)
         # Get ts trees and fetch data.
         ts_tree = self.structure.tstree_price(priceid)
-        self._add_series(ts_tree, ts_left, ts_right, missing2zero=missing2zero)
+        self._fetch_series(ts_tree, ts_left, ts_right, missing2zero=missing2zero)
         if debug:
             return ts_tree
         # Turn into portfolio line.

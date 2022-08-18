@@ -22,12 +22,14 @@ structure = belvys.Structure(
     },
 )
 
-# Define how to access the rest api.
-api = belvys.Api("belvisserver01:8080", "gas", "First.Lastname", "my_5tr0ngp@ssw0rd")
+# Define where and how to access the rest api.
+api = belvys.Api("belvisserver01:8080", "gas")
+api.access_from_usr_pwd("First.Lastname", "my_5tr0ngp@ssw0rd")
 
 # Create Tenant instance to query the data.
 tenant = belvys.Tenant(structure, api)
 
 ts_left = dt.date.today() - dt.timedelta(days=10)
 ts_right = dt.date.today() + dt.timedelta(days=10)
-tenant.portfolio_pfl("B2C_household", "current_offtake", ts_left, ts_right)
+offtake = tenant.portfolio_pfl("B2C_household", "current_offtake", ts_left, ts_right)
+prices = tenant.price_pfl("fwc_monthly_DE", ts_left, ts_right)

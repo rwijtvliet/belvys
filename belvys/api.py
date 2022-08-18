@@ -105,8 +105,8 @@ class Api:
             Server address including port.
         tenant : str
             Name of the Belvis tenant.
-        cache : Dict, optional
-            Cache to use for lookup. {pfid: {tsname: tsid}}
+        cache : Dict[str, Dict[str, int]], optional
+            Cache to use for lookup. Nested dictionany with format {pfid: {tsname: tsid}}
         filepath : pathlib.Path, optional
             If specified, saves api data (server, tenant, cache) to this file after every
             change for persistent storage. If not specified, the data is cached only for
@@ -163,6 +163,7 @@ class Api:
             {"server": self.server, "tenant": self.tenant, "cache": self.cache},
             open(filepath, "w"),
             allow_unicode=True,
+            sort_keys=False,
         )
 
     def read_cache(self, pfid: str, tsname: str) -> int:

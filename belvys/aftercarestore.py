@@ -7,7 +7,7 @@ from typing import Callable, Iterable, Union
 import pandas as pd
 import portfolyo as pf
 
-Aftercare = Callable[[pd.Series, int], pd.Series]
+Aftercare = Callable[[pd.Series, int, str, str], pd.Series]
 
 
 def fixed_to_float(fixed: str) -> Aftercare:
