@@ -10,6 +10,7 @@ import pytest
 
 def gettennants() -> Iterable[belvys.Tenant]:
     """Create tenants from data in environment variables."""
+
     def get_environ(key):
         value = os.environ.get(key)
         if value is None:
@@ -17,11 +18,13 @@ def gettennants() -> Iterable[belvys.Tenant]:
         return value
 
     try:
-        usr, pwd, server = (get_environ(key) for key in ("BELVIS_USER", "BELVIS_PWD", "BELVIS_SERVER_1"))
+        usr, pwd, server = (
+            get_environ(key) for key in ("BELVIS_USER", "BELVIS_PWD", "BELVIS_SERVER_1")
+        )
     except ValueError:
         return []
-    
-    tenants= []
+
+    tenants = []
     tenant_info = {
         "pwr": ("BELVIS_TENANT_1A", "BELVIS_STRUCT_1A"),
         "gas": ("BELVIS_TENANT_1B", "BELVIS_STRUCT_1B"),
@@ -35,17 +38,20 @@ def gettennants() -> Iterable[belvys.Tenant]:
         a.access_from_usr_pwd(usr, pwd)
         s = belvys.Structure.from_file(filepath)
         tenant = belvys.Tenant(s, a)
-        if key == 'gas':
+        if key == "gas":
+
             def gas_aftercare(s, tsid, *args):
                 if tsid == 23346575:
                     return s.tz_convert("+01:00").tz_localize(None)
                 else:
                     return s
+
             tenant.prepend_aftercare(gas_aftercare)
         tenants.append(tenant)
     return tenants
 
-@pytest.mark.parametrize('tenant', gettennants())
+
+@pytest.mark.parametrize("tenant", gettennants())
 def test_all_pflines(tenant: belvys.Tenant):
     ts_left = dt.date.today() - dt.timedelta(days=30)
     ts_right = dt.date.today() + dt.timedelta(days=30)
@@ -58,4 +64,3 @@ def test_all_pflines(tenant: belvys.Tenant):
     for priceid in tenant.structure.available_priceids():
         print(priceid)
         _ = tenant.price_pfl(priceid, ts_left, ts_right)
-    
