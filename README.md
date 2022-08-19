@@ -10,7 +10,7 @@ It can be created from a ``Structure`` and ``Api`` instance, which can be access
 
 ## Class ``Structure``
 
-The function of this class is primarily to specify the portfolios and timeseries we are interested in. This includes original Belvis portfolios, as well as synthetic ones that are the sum of several original porfolios. It also specifies where relevant prices can be found in Belvis.
+The purpose of this class is primarily to specify the portfolios and timeseries we are interested in. This includes original Belvis portfolios, as well as synthetic ones that are the sum of several original porfolios. It also specifies where relevant prices can be found in Belvis.
 
 It is used by the ``Tenant`` class, but can also be used stand-alone to load a structure file and investigate, which data is defined and how.
 

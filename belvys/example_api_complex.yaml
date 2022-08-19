@@ -1,0 +1,21 @@
+server: http://belvisserver:8040   # Server and port of the rest API. 
+tenant: pfm_power                  # Name of tenant on this server.
+cache:
+  B2C_household:
+    Offtake volume in MW: 6523
+    Expected churn in MW: 6525
+    Procurement forward volume NCG in MW: 1113
+    Procurement forward cost NCG in EUR: 1118
+  B2B_backtoback:
+    Offtake volume in MW: 7532
+    Expected churn in MW: 7522
+    Procurement forward volume NCG in MW: 1203
+    Procurement forward cost NCG in EUR: 1204
+  B2B_Spot:
+    Offtake volume in MW: 7562
+    Expected churn in MW: 7583
+    Procurement forward volume NCG in MW: 2102
+    Procurement forward cost NCG in EUR: 2109
+  Germany:
+    MPFC (THE): 9523
+    M2D profile: 9221

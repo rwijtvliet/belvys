@@ -36,7 +36,7 @@ def gettennants() -> Iterable[belvys.Tenant]:
         s = belvys.Structure.from_file(filepath)
         tenant = belvys.Tenant(s, a)
         if key == 'gas':
-            def gas_aftercare(s, tsid):
+            def gas_aftercare(s, tsid, *args):
                 if tsid == 23346575:
                     return s.tz_convert("+01:00").tz_localize(None)
                 else:
