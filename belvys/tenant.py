@@ -12,7 +12,7 @@ from .structure import Structure, Ts, TsTree
 
 
 class Tenant:
-    """Class to interact with belvis tenants.
+    """Class to interact with belvis tenants and retrieve data.
 
     Notes
     -----
