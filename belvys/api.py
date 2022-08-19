@@ -7,7 +7,6 @@ import datetime as dt
 import json
 import pathlib
 import urllib
-from types import NoneType
 from typing import Callable, Dict, List, Union
 
 import numpy as np
@@ -32,7 +31,7 @@ def create_url(server: str, path: str, *queryparts: str) -> str:
 @dataclass
 class Access:
     # Zero-parameter function to authorize with server.
-    authenticate: Callable[[], NoneType]
+    authenticate: Callable[[]]
     # Function used to fetch data from the server.
     request: Callable[[str], requests.request]
 

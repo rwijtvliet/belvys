@@ -1,11 +1,35 @@
+======
+Belvys
+======
+
 .. image:: https://img.shields.io/pypi/v/belvys
    :target: https://pypi.org/project/belvys
    :alt: PyPI
 
-Belvys
-======
+Package to fetch data from Kisters Belvis API. 
 
-Fetch data from Kisters Belvis API. It has 3 classes: ``Tenant``, which is the main class, and ``Structure`` and ``Api``, which it depends on. 
+------------
+Installation
+------------
+
+.. code-block:: bash
+
+   pip install belvys
+
+
+----------
+Disclaimer
+----------
+
+This package is not written by, maintained by, or associated with Kisters in any way.
+
+
+-------------
+Documentation
+-------------
+
+It has 3 classes: ``Tenant``, which is the main class, and ``Structure`` and ``Api``, which it depends on. 
+
 
 Class ``Tenant``
 ----------------
@@ -13,6 +37,7 @@ Class ``Tenant``
 This class uses a structure specification (see ``Structure``) and an interface (see ``Api``) to retrieve timeseries (more specifically ``portfolyo.PfLine`` instances) from Belvis.
 
 It can be created from a ``Structure`` and ``Api`` instance, which can be accessed from the ``.structure`` and ``.api`` properties.
+
 
 Class ``Structure``
 -------------------
@@ -24,6 +49,7 @@ It is used by the ``Tenant`` class, but can also be used stand-alone to load a s
 The most convenient way to create a ``Structure`` instance is from a yaml file, with the ``Structure.from_file()`` class method. 
 
 An example structure is returned by the ``belvys.example_structure()`` function; the corresponding file can stored to the file system with ``belvys.example_structure_to_file()``.
+
 
 Class ``Api``
 -------------
