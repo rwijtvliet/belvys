@@ -10,7 +10,7 @@ setup(
     zip_safe=False,
     packages=find_packages(exclude=["tests"]),
     description="Getting timeseries data from Belvis Rest API.",
-    long_description=open("README.md").read(),
+    long_description=open("README.rst").read(),
     long_description_content_type="text/x-rst",
     python_requires=">=3.8",
     install_requires=[line.strip() for line in open("requirements.txt", "r")],
