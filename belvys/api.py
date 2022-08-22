@@ -31,6 +31,9 @@ class Access:
     # Function used to fetch data from the server.
     request: Callable[[str], requests.request]
 
+    def __post_init__(self):
+        self.authenticate()  # Run once to verify authentication works.
+
     @classmethod
     def from_usr_pwd(cls, server: str, tenant: str, usr: str, pwd: str) -> Access:
         """Use username and password to access Belvis API.
