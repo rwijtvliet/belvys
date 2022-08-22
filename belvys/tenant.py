@@ -9,6 +9,7 @@ from . import aftercarestore
 from .aftercarestore import Aftercare
 from .api import Api
 from .structure import Structure, Ts, TsTree
+from .common import print_status
 
 
 class Tenant:
@@ -113,6 +114,7 @@ class Tenant:
             ts = ts_tree
             if ts.tsid is None:
                 ts.tsid = self.api.find_tsid(ts.pfid, ts.name)
+            print_status(f"{ts.pfid} | {ts.tsid} | {ts.name} | [{ts_left}-{ts_right}]")
             ts.series = self.api.series(ts.tsid, ts_left, ts_right, **kwargs)
         if isinstance(ts_tree, Dict):
             for subtree in ts_tree.values():

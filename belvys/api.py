@@ -13,11 +13,7 @@ import numpy as np
 import pandas as pd
 import requests
 import yaml
-
-
-def print_status(msg: str):
-    """Print current timestamp and status message ``msg`` to terminal."""
-    print(f"{dt.datetime.now().isoformat()} {msg}")
+from .common import print_status
 
 
 def create_url(server: str, path: str, *queryparts: str) -> str:
@@ -393,9 +389,6 @@ class Api:
         """
         # Get metadata and print status message.
         metadata = self.metadata(tsid)
-        print_status(
-            f"Getting data: [{ts_left}-{ts_right}] {tsid} ({metadata['timeSeriesName']})."
-        )
         # Get data.
         url = create_url(
             self.server,
