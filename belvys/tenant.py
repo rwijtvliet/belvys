@@ -22,6 +22,7 @@ class Tenant:
     .api.series() method. This may be necessary due to local Belvis settings. Each
     function must accept 4 arguments: the pandas Series, the timeseries id, the portfolio
     id, and the timeseries name. It must return a pandas Series.
+
     - By default, the list contains a single function, which brings the series in
       standardized form, by assuming the timestamps returned by Belvis are leftbound if
       they represent daily (or longer) time periods, and rightbound otherwise. It is a
@@ -30,7 +31,7 @@ class Tenant:
       a portfolio line (portfolyo.PfLine) can be initialized.
     - If a specific timeseries needs a special treatment, the other function parameters
       (the timeseries id, the pfid, the timeseries name) can be used in the function
-      code to target that timeseries only. If they are not needed, use *args to eat up
+      code to target that timeseries only. If they are not needed, use ``*args`` to eat up
       the unneeded parameters.
     - A function can be prepended to the existing list with .prepend_aftercare(), appended
       to it with .append_aftercare(), or the whole list can be set with .aftercare = [...].

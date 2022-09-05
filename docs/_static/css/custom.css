@@ -1,0 +1,96 @@
+@import 'syntax.css';
+
+/* contents */
+div.contents.local.topic {
+  border-left: 5px solid #ccc;
+  padding-left: 10px;
+  margin-bottom: 1.5em;
+  margin-bottom: 2em;
+}
+div.contents.local.topic p.topic-title {
+  margin-top: 0em;
+  font-weight: 400;
+  color: #666;
+  margin-bottom: 0.5em;
+}
+div.contents.local.topic ul {
+  list-style-type: square;
+  color: #ccc; /* color of bullets only*/
+  padding-left: 1em;
+  padding-bottom: 0;
+}
+div.contents.local.topic ul li p {
+  margin-bottom: 0;
+}
+div.contents.local.topic ul li p a {
+  font-weight: 400;
+  color: #666;
+}
+
+/* footnotes */
+a.footnote-reference {
+  position: relative; 
+  top: -0.5em; 
+  font-size: 80%; 
+  background: #2D2D2D;
+  color: #EBEBEB;
+}
+dl.footnote dt.label {
+  background: #2D2D2D;
+  color: #EBEBEB;
+  padding-top: 0.2em;
+  padding-left: 0.2em;
+  padding-right: 0.2em;
+  padding-bottom: 0.2em;
+  margin-bottom: -1em;
+}
+
+/* table footnotes (definition lists) */
+table {
+  margin-top: 1em;
+}
+table tbody tr td p {
+  margin-bottom: 0.5em;
+}
+table tbody tr td p a.reference.internal {
+  background: #2D2D2D;
+  color: #EBEBEB;
+  position: relative; 
+  top: -0.5em; 
+  font-size: 80%; 
+  padding: 0.2em 0.2em 0;
+}
+dl.simple dt {
+  background: #2D2D2D;
+  color: #EBEBEB;
+  padding: 0 0.4em 0.1em;
+  top: -0.5em; 
+  font-size: 80%;
+}
+
+
+/* code blocks */ 
+div.highlight > pre {
+  padding: 1em !important;
+  font-family: "consolas", monospace !important;
+  font-size: smaller !important;
+}
+
+/* code blocks jupyter */ 
+div.nbinput.container {
+  padding-bottom: 1em !important;
+  padding-top: 1em !important;
+}
+div.nboutput.container {
+  padding-bottom: 2em !important;
+}
+
+/* styling of API */
+dl:not(.docutils) dl.field-list.simple dt {
+  background: #E6E6E6;
+  color: #2D2D2D;
+  border-left: none;
+  padding: 0.25em;
+}
+
+/* ---- */

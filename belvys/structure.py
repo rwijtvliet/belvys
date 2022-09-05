@@ -42,12 +42,12 @@ class Portfolios:
         if not isinstance(self.original, Iterable):
             raise TypeError(f"'original' must be Iterable, got {type(self.original)}.")
         if not len(self.original):
-            raise ValueError(f"'original' must have at least one element.")
+            raise ValueError("'original' must have at least one element.")
         for ref in self.synthetic.values():
             try:
                 self._assert_valid_ref(ref)
             except AssertionError as e:
-                raise ValueError(f"Unexpected value for 'synthetic'") from e
+                raise ValueError("Unexpected value for 'synthetic'") from e
 
     def _assert_valid_ref(self, ref: str) -> None:
         if isinstance(ref, str):
@@ -78,10 +78,12 @@ class Structure:
         The portfolio lines that we are interested in.
         Dictionary with string keys (=pfline ids), which map onto the following possible
         values:
+
         - string value or list of string values (=timeseries name(s) as found in Belvis),
           which define a flat portfolio line (i.e., without children).
         - dictionary, which defines a mapping of child names onto timeseries name(s). May
           be nested.
+
     portfolios : Portfolios
         The portfolios we are interested in.
         Dictionary with at least the key 'original' which maps onto a list of strings (=
@@ -95,6 +97,7 @@ class Structure:
         (which has a (list of) timeseries names as its value).
     corrections : Dict[str, Dict[str, Union[TsNameTree, None]]]
         If not all pflines can be found in all portfolios, we can specify this here.
+
         - If a portfolio has a pfline that is not found in the others (and therefore not
           specified in parameter ``pfline`` above), we can add a nested dictionary
           {pfid: {pflineid: tsnames}}.
@@ -296,8 +299,10 @@ class Structure:
         else:
             # Only keep those pflineids that are present in all summands.
             original_pfids = self.to_original_pfids(pfid)
-            return set.intersection(
-                *[self.available_pflineids(pfid) for pfid in original_pfids]
+            return list(
+                set.intersection(
+                    *[self.available_pflineids(pfid) for pfid in original_pfids]
+                )
             )
 
     def available_priceids(self) -> Iterable[str]:
