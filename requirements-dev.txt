@@ -1,3 +1,4 @@
 black
 flake8
 twine
+pre-commit

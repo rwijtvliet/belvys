@@ -1,10 +1,17 @@
-======
 Belvys
 ======
 
 .. image:: https://img.shields.io/pypi/v/belvys
    :target: https://pypi.org/project/belvys
    :alt: PyPI
+
+.. image:: https://github.com/rwijtvliet/belvys/workflows/CI/badge.svg
+   :target: https://github.com/rwijtvliet/belvys/actions?query=workflow%3ACI
+   :alt: GitHub Actions - CI
+
+.. image:: https://github.com/rwijtvliet/belvys/workflows/pre-commit/badge.svg
+   :target: https://github.com/rwijtvliet/belvys/actions?query=workflow%3Apre-commit
+   :alt: GitHub Actions - pre-commit
 
 Package to fetch data from Kisters Belvis API. 
 
@@ -15,6 +22,37 @@ Installation
 .. code-block:: bash
 
    pip install belvys
+
+
+-------------
+Documentation
+-------------
+
+Documentation is hosted on readthedocs:
+
+https://belvys.readthedocs.io/
+
+----------
+Repository
+----------
+
+The git repository is hosted on github:
+
+http://www.github.com/rwijtvliet/belvys
+
+
+----------
+Developing
+----------
+
+This project uses ``black`` to format code and ``flake8`` for linting. We also support ``pre-commit`` to ensure
+these have been run. To configure your local environment please install these development dependencies and set up
+the commit hooks.
+
+.. code-block:: bash
+
+   $ pip install -r requirements-dev.txt
+   $ pre-commit install
 
 
 ----------
