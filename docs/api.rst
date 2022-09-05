@@ -36,19 +36,35 @@ Before we can get any data from the belvis server, we need to authenicate with b
 -----
 Usage
 -----
-
+ 
 The following methods can be used to get timeseries data, IF the timeseries ID (``tsid``) is known. 
 
-* ``.metadata()``: data *describing* the timeseries.
+* ``.metadata()``: data *describing* the timeseries. The most relevant metadata are highlighted. With the ``instanceToken``, the portfolio ID is meant. 
 
   .. code-block:: python
      
      # Continuation of previous example.
-     api.metadata(120729)
+     api.metadata(23840744)
 
   .. code-block:: python
+     :emphasize-lines: 1, 4, 6, 14
 
-     # Example data TODO
+     {'id': '23840744',
+      'dataExchangeNumber': None,
+      'instanceName': 'Household customers',
+      'instanceToken': 'B2C_household',
+      'instanceType': 'book',
+      'measurementUnit': 'MW',
+      'meteringCodeOnExport': None,
+      'obisCode': None,
+      'obisCodeOnMsconsExport': None,
+      'parameterName': 'General',
+      'specificationName': 'Buch.Wirkl.Saldo',
+      'specificationNumber': 5163,
+      'timeRange': '2016-01-01T06:00:00.000Z--2026-01-01T05:00:00.000Z',
+      'timeSeriesName': 'Procurement forward volume in MW',
+      'timeStampOfLastSaving': '2022-09-02T11:57:41.000Z',
+      'virtualMeteringCode': None}
 
 * ``.series()``: actual timeseries data. Includes a physical (`pint <https://pint.readthedocs.io>`_) unit if one is found in the metadata. This is the main method of this class.
 
@@ -56,11 +72,46 @@ The following methods can be used to get timeseries data, IF the timeseries ID (
 
      # Continuation of previous example.
      import pandas as pd
-     api.series(120729, pd.Timestamp('2022-11-11'), pd.Timestamp('2022-11-13'))
+     api.series(23840744, pd.Timestamp('2022-09-30'), pd.Timestamp('2022-10-02'))
 
   .. code-block:: python
 
-     # Expample data TODO
+      ts
+      2022-09-29 23:00:00+00:00    17.802
+      2022-09-30 00:00:00+00:00    17.802
+      2022-09-30 01:00:00+00:00    17.802
+      2022-09-30 02:00:00+00:00    17.802
+      ...                          ...
+      2022-10-01 02:00:00+00:00    17.802
+      2022-10-01 03:00:00+00:00    17.802
+      2022-10-01 04:00:00+00:00    17.802
+      2022-10-01 05:00:00+00:00    36.935
+      2022-10-01 06:00:00+00:00    36.935
+      2022-10-01 07:00:00+00:00    36.935
+      2022-10-01 08:00:00+00:00    36.935
+      2022-10-01 09:00:00+00:00    36.935
+      2022-10-01 10:00:00+00:00    36.935
+      2022-10-01 11:00:00+00:00    36.935
+      2022-10-01 12:00:00+00:00    36.935
+      2022-10-01 13:00:00+00:00    36.935
+      2022-10-01 14:00:00+00:00    36.935
+      2022-10-01 15:00:00+00:00    36.935
+      2022-10-01 16:00:00+00:00    36.935
+      2022-10-01 17:00:00+00:00    36.935
+      2022-10-01 18:00:00+00:00    36.935
+      2022-10-01 19:00:00+00:00    36.935
+      2022-10-01 20:00:00+00:00    36.935
+      2022-10-01 21:00:00+00:00    36.935
+      2022-10-01 22:00:00+00:00    36.935
+      Freq: H, Length: 48, dtype: pint[MW]
+
+A few things to note here about the data as it is returned by the Belvis API:
+
+* Timestamps are localized to the UTC timezone. A conversion to the correct (in this case "Europe/Berlin") timezone is necessary.
+
+* Timestamps are right-bound. The final timestamp is ``2022-09-29 23:00:00+00:00``, which is the same as ``2022-09-30 01:00:00+02:00`` in the Europe/Berlin timezone: the first hour of 2022-09-30 is denoted with the 01:00 o'clock timestamp, which is when that hour *ends*, not when it starts.  
+
+* A peculiarity of the gas market can also be seen: daily values do not apply from midnight to midnight, but rather from 06:00 to 06:00. The values change with the timestamp ``2022-10-01 05:00:00+00:00``, which is ``2022-10-01 07:00:00+02:00``, which denotes the time period from 06:00 to 07:00 (see previous point). 
 
 --------------
 Timeseries IDs
