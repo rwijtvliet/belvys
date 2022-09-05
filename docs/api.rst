@@ -37,9 +37,12 @@ Before we can get any data from the belvis server, we need to authenicate with b
 Usage
 -----
  
-The following methods can be used to get timeseries data, IF the timeseries ID (``tsid``) is known. 
+The following methods can be used to get timeseries data, *if* the timeseries ID (``tsid``) is known. 
 
-* ``.metadata()``: data *describing* the timeseries. The most relevant metadata are highlighted. With the ``instanceToken``, the portfolio ID is meant. 
+Metadata
+--------
+
+``.metadata()`` returns a dictionary *describing* the timeseries, see the example below. The most relevant metadata are highlighted. With the ``instanceToken``, the portfolio ID is meant. 
 
   .. code-block:: python
      
@@ -66,7 +69,10 @@ The following methods can be used to get timeseries data, IF the timeseries ID (
       'timeStampOfLastSaving': '2022-09-02T11:57:41.000Z',
       'virtualMeteringCode': None}
 
-* ``.series()``: actual timeseries data. Includes a physical (`pint <https://pint.readthedocs.io>`_) unit if one is found in the metadata. This is the main method of this class.
+Series
+------
+
+This is the main method of this class; ``.series()`` returns actual timeseries data. It includes a physical (`pint <https://pint.readthedocs.io>`_) unit if one is found in the metadata, see below. 
 
   .. code-block:: python
 
@@ -111,7 +117,7 @@ A few things to note here about the data as it is returned by the Belvis API:
 
 * Timestamps are right-bound. The final timestamp is ``2022-09-29 23:00:00+00:00``, which is the same as ``2022-09-30 01:00:00+02:00`` in the Europe/Berlin timezone: the first hour of 2022-09-30 is denoted with the 01:00 o'clock timestamp, which is when that hour *ends*, not when it starts.  
 
-* A peculiarity of the gas market can also be seen: daily values do not apply from midnight to midnight, but rather from 06:00 to 06:00. The values change with the timestamp ``2022-10-01 05:00:00+00:00``, which is ``2022-10-01 07:00:00+02:00``, which denotes the time period from 06:00 to 07:00 (see previous point). 
+* A peculiarity of the gas market can also be seen: daily values do not apply from midnight to midnight, but rather from 06:00 to 06:00. The values change with the timestamp ``2022-10-01 05:00:00+00:00``, which is ``2022-10-01 07:00:00+02:00``, which in Belvis denotes the time period from 06:00 to 07:00 (see previous point). 
 
 --------------
 Timeseries IDs
