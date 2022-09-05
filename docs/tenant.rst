@@ -69,7 +69,7 @@ Portfolio data
     offtake = tenant.portfolio_pfl("B2C_household", "current_offtake", ts_left, ts_right)
     offtake
 
-.. code-block::
+.. code-block:: text
 
     PfLine object with volume information.
     . Timestamps: first: 2022-09-05 00:00:00+02:00     timezone: Europe/Berlin
@@ -99,7 +99,7 @@ Prices
     prices = tenant.price_pfl("fwc_monthly_DE", ts_left, ts_right)
     prices
 
-.. code-block::
+.. code-block:: text
 
     PfLine object with price information.
     . Timestamps: first: 2022-09-05 00:00:00+02:00     timezone: Europe/Berlin

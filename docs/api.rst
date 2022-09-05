@@ -49,7 +49,7 @@ Metadata
      # Continuation of previous example.
      api.metadata(23840744)
 
-  .. code-block::
+  .. code-block:: text
      :emphasize-lines: 1, 4, 6, 14
 
      {'id': '23840744',
@@ -80,7 +80,7 @@ This is the main method of this class; ``.series()`` returns actual timeseries d
      import pandas as pd
      api.series(23840744, pd.Timestamp('2022-09-30'), pd.Timestamp('2022-10-02'))
 
-  .. code-block::
+  .. code-block:: text
 
       ts
       2022-09-29 23:00:00+00:00    17.802
