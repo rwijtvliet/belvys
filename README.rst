@@ -13,6 +13,10 @@ Belvys
    :target: https://github.com/rwijtvliet/belvys/actions?query=workflow%3Apre-commit
    :alt: GitHub Actions - pre-commit
 
+.. image:: https://readthedocs.org/projects/belvys/badge/?version=latest
+    :target: https://belvys.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
+
 Package to fetch data from Kisters Belvis API. 
 
 ------------
