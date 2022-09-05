@@ -103,7 +103,7 @@ Prices
 
     PfLine object with price information.
     . Timestamps: first: 2022-09-05 00:00:00+02:00     timezone: Europe/Berlin
-                last: 2022-09-07 23:45:00+02:00         freq: <15 * Minutes> (288 datapoints)
+                   last: 2022-09-07 23:45:00+02:00         freq: <15 * Minutes> (288 datapoints)
                                         p
                                   Eur/MWh
 

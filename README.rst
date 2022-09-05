@@ -17,7 +17,7 @@ Belvys
     :target: https://belvys.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
 
-Package to fetch data from Kisters Belvis API. 
+Package to fetch data through the REST API of energy portfolio management software "Belvis".
 
 ------------
 Installation
@@ -73,4 +73,5 @@ the commit hooks.
 Disclaimer
 ----------
 
-This package is not written by, maintained by, or associated with Kisters in any way.
+
+This package interacts with the Belvis software which is delevoped by Kisters. This package is not written by, maintained by, or associated with Kisters in any way.

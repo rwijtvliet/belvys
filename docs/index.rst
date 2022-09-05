@@ -24,7 +24,7 @@ Belvys
     :alt: Documentation Status
 
 
-Package to fetch data from Kisters Belvis API. 
+Package to fetch data through the REST API of energy portfolio management software "Belvis".
 
 ------------
 Installation
