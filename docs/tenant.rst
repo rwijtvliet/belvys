@@ -15,7 +15,6 @@ A tenant can be initialised using a ``Structure`` and an ``Api`` instance. Conti
 .. code-block:: python
 
     import belvys
-    import datetime as dt
 
     # Define the structure of the belvis tenant and the timeseries we're interested in.
     structure = belvys.Structure(
@@ -49,13 +48,14 @@ A tenant can be initialised using a ``Structure`` and an ``Api`` instance. Conti
 Usage
 -----
 
-The most important methods are ``.portfolio_pfl()`` and ``.price_pfl()``. Both return a ``portfolyo.PfLine`` (see `here <portfolyo.readthedocs.io>`_) instance. Here we see how they are used to get data for the 3-day time period starting on midnight today:
+The most important methods are ``.portfolio_pfl()`` and ``.price_pfl()``. Both return a ``portfolyo.PfLine`` (see `here <portfolyo.readthedocs.io>`_) instance. Here we see how they are used to get data for the 3-day (left-closed) time period from midnight 2022-09-05 until midnight 2022-09-08:
 
 .. code-block:: python
 
     # Continuation of previous example.
-    ts_left = dt.date.today()
-    ts_right = dt.date.today() + dt.timedelta(days=3)
+    import pandas as pd
+    ts_left = pd.Timestamp('2022-09-05')
+    ts_right = pd.Timestamp('2022-09-08')
     
 
 Portfolio data
