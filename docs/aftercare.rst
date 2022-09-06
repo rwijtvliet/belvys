@@ -57,8 +57,6 @@ Right-bound
 
     .. code-block:: python
 
-        from portfolyo.tools import frames
-
         def makeleft(s: pandas.Series) -> pandas.Series:
             td = s.index[1] - s.index[0]
             if td <= dt.timedelta(hours=2):
