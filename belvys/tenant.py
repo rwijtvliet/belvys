@@ -1,15 +1,28 @@
 import datetime as dt
 from collections import defaultdict
-from typing import Callable, Dict, Iterable, Union
+from typing import Dict, Iterable, Union
 
 import pandas as pd
 import portfolyo as pf
 
-from . import aftercarestore
-from .aftercarestore import Aftercare
+from . import adjustment
+from .adjustment import Adjustment
 from .api import Api
 from .structure import Structure, Ts, TsTree
 from .common import print_status
+
+
+def fact_default_aftercare(tz) -> Adjustment:
+
+    convert_to_tz = adjustment.fact_convert_to_tz(tz)
+
+    def aftercare(s: pd.Series, tsid: int, pfid: str, tsname: str) -> pd.Series:
+        s = convert_to_tz(s)
+        s = adjustment.infer_frequency(s)
+        s = adjustment.makeleft(s)
+        return s
+
+    return aftercare
 
 
 class Tenant:
@@ -52,7 +65,7 @@ class Tenant:
         """
         self._structure = structure
         self._api = api
-        self._aftercare = [aftercarestore.standardize_belvis(self.structure.tz)]
+        self._aftercare = fact_default_aftercare(self.structure.tz)
 
     @property
     def structure(self) -> Structure:
@@ -75,29 +88,12 @@ class Tenant:
         self._api = api
 
     @property
-    def aftercare(self) -> Iterable[Aftercare]:
+    def aftercare(self) -> Adjustment:
         return self._aftercare
 
     @aftercare.setter
-    def aftercare(self, aftercare_fns: Iterable[Aftercare] = None) -> None:
-        if aftercare_fns is None:
-            self._aftercare = []
-        elif isinstance(aftercare_fns, Callable):
-            self._aftercare = [aftercare_fns]
-        else:
-            self._aftercare = aftercare_fns
-
-    def prepend_aftercare(self, aftercare_fn: Aftercare) -> None:
-        """Prepend function to list of aftercare functions."""
-        if not isinstance(aftercare_fn, Callable):
-            raise TypeError("Must provide a function.")
-        self._aftercare = [aftercare_fn, *self._aftercare]
-
-    def append_aftercare(self, aftercare_fn: Aftercare) -> None:
-        """Append function to list of aftercare functions."""
-        if not isinstance(aftercare_fn, Callable):
-            raise TypeError("Must provide a function.")
-        self._aftercare.append(aftercare_fn)
+    def aftercare(self, aftercare: Adjustment) -> None:
+        self._aftercare = aftercare
 
     # ---
 

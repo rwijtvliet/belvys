@@ -1,6 +1,6 @@
 """Getting data from Kisters' portfolio management system 'Belvis'."""
 
-from . import _version, aftercarestore
+from . import _version, adjustment
 from .api import Api
 from .structure import Structure
 from .tenant import Tenant

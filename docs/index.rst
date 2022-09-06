@@ -41,10 +41,19 @@ Contents
 
 .. toctree::
    :maxdepth: 1
+   :caption: main classes
 
    api
    structure
    tenant 
+
+.. toctree::
+   :maxdepth: 1
+   :caption: additional
+
+   aftercare
+   example
+   docstrings
 
 
 ----------

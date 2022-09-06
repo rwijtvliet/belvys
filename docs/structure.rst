@@ -86,9 +86,9 @@ When the instance has been created, we can see which data is available using sev
       # --- hide: start ---
       print(structure.available_priceids())
 
-----------------
-Complete example
-----------------
+--------------
+Complex example
+--------------
 
 The example shown above is a basic one. Here is a more complex example file, which shows all possibilities to specify a ``Structure``.
 
