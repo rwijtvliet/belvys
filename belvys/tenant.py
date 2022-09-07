@@ -30,28 +30,27 @@ class Tenant:
 
     Notes
     -----
-    An important attribute of this class is .aftercare, which is a list of functions.
-    These functions are used to make small changes to the timeseries returned by the
-    .api.series() method. This may be necessary due to local Belvis settings. Each
-    function must accept 4 arguments: the pandas Series, the timeseries id, the portfolio
-    id, and the timeseries name. It must return a pandas Series.
+    An important attribute of this class is .aftercare, which is a function that is used
+    to make small adjustments to the timeseries returned by the .api.series() method.
+    This may be necessary due to local Belvis settings. The function must accept 4
+    arguments: the pandas Series, the timeseries id, the portfolio id, and the timeseries
+    name. It must return a pandas Series from which a portfolio line (portfolyo.PfLine)
+    can be initialized.
 
-    - By default, the list contains a single function, which brings the series in
-      standardized form, by assuming the timestamps returned by Belvis are leftbound if
-      they represent daily (or longer) time periods, and rightbound otherwise. It is a
-      curried version of portfolyo.standardize which also sets the timezone.
-    - The functions are called in order; the end result should be timeseries from which
-      a portfolio line (portfolyo.PfLine) can be initialized.
-    - If a specific timeseries needs a special treatment, the other function parameters
+    - By default, the function makes three adjustments: it sets the timezone (to the one
+      specified in .structure.tz), it infers the frequency of the timeseries, and it makes
+      the timestamps leftbound. (by assuming the timestamps returned by Belvis are
+      leftbound if they represent daily (or longer) time periods, and rightbound
+      otherwise.
+    - If the default is not what is needed, the user must specify a custom aftercare
+      function. If a specific timeseries needs a special treatment, the function parameters
       (the timeseries id, the pfid, the timeseries name) can be used in the function
-      code to target that timeseries only. If they are not needed, use ``*args`` to eat up
-      the unneeded parameters.
-    - A function can be prepended to the existing list with .prepend_aftercare(), appended
-      to it with .append_aftercare(), or the whole list can be set with .aftercare = [...].
+      definition to target that timeseries only. If they are not needed, ``*args`` may
+      be used to "eat up" the unneeded parameters.
 
     If .portfolio_pfl() and .price_pfl() raise an Exception when creating the ``PfLine``
-    instance, inspect the series that the PfLine receives as input, with the
-    .portfolio_series() and .price_series() functions.
+    instance, inspect the series that the PfLine receives as input, by setting their
+    ``debug`` parameter to True.
     """
 
     def __init__(self, structure: Structure = None, api: Api = None):
@@ -139,8 +138,8 @@ class Tenant:
         for ts in tss:
             s = ts.series  # series as returned by api.
             # Here we make corrections for design decisions in our Belvis database.
-            for fn in self.aftercare:
-                s = fn(s, ts.tsid, ts.pfid, ts.name)
+            if self.aftercare is not None:
+                s = self.aftercare(s, ts.tsid, ts.pfid, ts.name)
             # Sort by dimensionality.
             dim = s.pint.dimensionality
             series_by_dimension[dim].append(s)
