@@ -25,7 +25,7 @@ span.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
 span.gt { color: #0044DD } /* Generic.Traceback */
 span.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
 span.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
-span.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+span.kn { color: #008000} /* Keyword.Namespace */
 span.kp { color: #008000 } /* Keyword.Pseudo */
 span.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
 span.kt { color: #B00040 } /* Keyword.Type */
@@ -40,7 +40,7 @@ span.ni { color: #717171; font-weight: bold } /* Name.Entity */
 span.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
 span.nf { color: #0000FF } /* Name.Function */
 span.nl { color: #767600 } /* Name.Label */
-span.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+span.nn { color: #00008b } /* Name.Namespace */
 span.nt { color: #008000; font-weight: bold } /* Name.Tag */
 span.nv { color: #19177C } /* Name.Variable */
 span.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
