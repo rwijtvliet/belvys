@@ -268,7 +268,8 @@ class Structure:
                     pfids.append(pfid)
             return pfids
         raise ValueError(
-            f"Could not find portfolio id {pfid} in configuration for this tenant."
+            f"Could not find portfolio id {pfid} in configuration for this tenant; "
+            f"expected one of {', '.join((*self.portfolios.original, *self.portfolios.synthetic))}."
         )
 
     def available_pflineids(self, pfid: str) -> Iterable[str]:
