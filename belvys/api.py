@@ -1,18 +1,19 @@
 """Get data from Belvis rest api."""
 
 from __future__ import annotations
-from dataclasses import dataclass
 
 import datetime as dt
 import json
 import pathlib
 import urllib
+from dataclasses import dataclass
 from typing import Callable, Dict, List, Union
 
 import numpy as np
 import pandas as pd
 import requests
 import yaml
+
 from .common import print_status
 
 
@@ -339,11 +340,13 @@ class Api:
         # Raise error if 0 or > 1 found.
         if len(hits) == 0:
             raise ValueError(
-                f"No timeseries with exact name '{tsname}' found in portfolio '{pfid}'. Check if ``pfid`` and ``tsname`` are correct."
+                f"No timeseries with exact name '{tsname}' found in portfolio '{pfid}'."
+                " Check if ``pfid`` and ``tsname`` are correct."
             )
         elif len(hits) > 1:
             raise ValueError(
-                f"Multiple timeseries with exact name '{tsname}' found in portfolio '{pfid}'. Check your Belvis instance."
+                f"Multiple timeseries with exact name '{tsname}' found in portfolio '{pfid}'."
+                " Check your Belvis instance."
             )
         return next(iter(hits.values()))
 
@@ -358,7 +361,7 @@ class Api:
         missing2zero: bool = True,
         blocking: bool = True,
     ) -> pd.Series:
-        """Return timeseries in given delivery time interval.
+        """Return timeseries in given delivery time interval using its id.
 
         Parameters
         ----------
@@ -411,3 +414,62 @@ class Api:
         s = pd.Series(df["v"].to_list(), pd.DatetimeIndex(df["ts"]), f"pint[{unit}]")
         s.index.freq = pd.infer_freq(s.index)
         return s
+
+    def series_from_tsname(
+        self,
+        pfid: str,
+        tsname: str,
+        ts_left: Union[pd.Timestamp, dt.datetime],
+        ts_right: Union[pd.Timestamp, dt.datetime],
+        *,
+        leftrange: str = "exclusive",
+        rightrange: str = "inclusive",
+        missing2zero: bool = True,
+        blocking: bool = True,
+    ) -> pd.Series:
+        """Return timeseries in given delivery time interval, using its name and portfolio
+        id.
+
+        Parameters
+        ----------
+        pfid : int
+            ID (=short name) of portfolio in Belvis.
+        tsname : str
+            Name of the timeseries. Must be exact.
+        ts_left : Union[pd.Timestamp, dt.datetime]
+        ts_right : Union[pd.Timestamp, dt.datetime]
+        leftrange : str, optional (default: 'exclusive')
+            'inclusive' ('exclusive') to get values with timestamp that is >= (>) ts_left.
+            Default: 'exclusive' because timestamps in Belvis are *usually* right-bound.
+        rightrange : str, optional (default: 'inclusive')
+            'inclusive' ('exclusive') to get values with timestamp that is <= (<) ts_right.
+            Default: 'inclusive' because timestamps in Belvis are *usually* right-bound.
+        missing2zero : bool, optional (default: True)
+            What to do with values that are flagged as 'missing'. True to replace with 0,
+            False to replace with nan.
+        blocking : bool, optional (default: True)
+            If True, recalculates data that is not up-to-date before returning; might take
+            long time or result in internal-server-error. If False, return most up-to-date
+            data that is available without recalculating.
+
+        Returns
+        -------
+        pd.Series
+            with resulting information.
+
+        Notes
+        -----
+        - Returns series with data as found in Belvis; no correction (e.g. for right-bounded
+          timestamps) done.
+        - If not yet cached, the ``.series()`` method is potentially a lot faster.
+        """
+        tsid = self.find_tsid(pfid, tsname)
+        return self.series(
+            tsid,
+            ts_left,
+            ts_right,
+            leftrange=leftrange,
+            rightrange=rightrange,
+            missing2zero=missing2zero,
+            blocking=blocking,
+        )

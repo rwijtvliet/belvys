@@ -30,15 +30,7 @@ A tenant can be initialised using a ``Structure`` and an ``Api`` instance. Conti
 Usage
 -----
 
-The most important methods are ``.portfolio_pfl()`` and ``.price_pfl()``. Both return a ``portfolyo.PfLine`` (see `here <portfolyo.readthedocs.io>`_) instance. Here we see how they are used to get data for the 3-day (left-closed) time period from midnight 2022-09-05 until midnight 2022-09-08:
-
-.. code-block:: python
-
-    # Continuation of previous example.
-    import pandas as pd
-    ts_left = pd.Timestamp('2022-09-05')
-    ts_right = pd.Timestamp('2022-09-08')
-    
+The most important methods are ``.portfolio_pfl()``, ``.price_pfl()``, and ``general_pfl()``. All return a ``portfolyo.PfLine`` (see `here <portfolyo.readthedocs.io>`_) instance. Here we see how they are used to get data for the 3-day (left-closed) time period from midnight 2022-09-05 until midnight 2022-09-08.
 
 Portfolio data
 --------------
@@ -48,7 +40,7 @@ Portfolio data
 .. code-block:: python
 
     # Continuation of previous example.
-    offtake = tenant.portfolio_pfl("B2C_household", "current_offtake", ts_left, ts_right)
+    offtake = tenant.portfolio_pfl("B2C_household", "current_offtake", "2022-09-05", "2022-09-08")
     offtake
 
 .. code-block:: text
@@ -78,7 +70,7 @@ Prices
 .. code-block:: python
 
     # Continuation of previous example.
-    prices = tenant.price_pfl("fwc_monthly_DE", ts_left, ts_right)
+    prices = tenant.price_pfl("fwc_monthly_DE", "2022-09-05", "2022-09-08")
     prices
 
 .. code-block:: text
@@ -100,6 +92,36 @@ Prices
     2022-09-07 23:30:00 +0200      377.55
     2022-09-07 23:45:00 +0200      295.72
 
+
+General
+-------
+
+For convenience, the method ``.general_pfl()`` exists. It can be used to fetch data using the timeseries name. This is useful if data is needed from a timeseries that is *not* specified in the ``Structure`` instance.
+
+.. code-block:: python
+
+    # Continuation of previous example.
+    churn = tenant.general_pfl("B2C_Household", "Expected churn in MW", "2022-09-05", "2022-09-08")
+    churn
+
+.. code-block:: text
+
+    PfLine object with volume information.
+    . Timestamps: first: 2022-09-05 00:00:00+02:00     timezone: Europe/Berlin
+                   last: 2022-09-07 23:45:00+02:00         freq: <15 * Minutes> (288 datapoints)
+                                         w           q
+                                        MW         MWh
+
+    2022-09-05 00:00:00 +0200         -9.9        -2.5
+    2022-09-05 00:15:00 +0200         -9.8        -2.5
+    2022-09-05 00:30:00 +0200         -9.7        -2.4
+    2022-09-05 00:45:00 +0200         -9.5        -2.4
+    2022-09-05 01:00:00 +0200         -9.5        -2.4
+    ..                                  ..          ..
+    2022-09-07 23:00:00 +0200        -11.2        -2.8
+    2022-09-07 23:15:00 +0200        -10.9        -2.7
+    2022-09-07 23:30:00 +0200        -10.7        -2.7
+    2022-09-07 23:45:00 +0200        -10.5        -2.6
 
 
 -----

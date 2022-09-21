@@ -106,15 +106,20 @@ A few things to note here about the data as it is returned by the Belvis API:
 
 * Timestamps are localized to the UTC timezone. A conversion to the correct (in this case "Europe/Berlin") timezone is necessary.
 
-* Timestamps are right-bound. The final timestamp is ``2022-09-29 23:00:00+00:00``, which is the same as ``2022-09-30 01:00:00+02:00`` in the Europe/Berlin timezone: the first hour of 2022-09-30 is denoted with the 01:00 o'clock timestamp, which is when that hour *ends*, not when it starts.  
+* Timestamps are right-bound. In the example above, the first timestamp is ``2022-09-29 23:00:00+00:00``, which is the same as ``2022-09-30 01:00:00+02:00`` in the Europe/Berlin timezone. The first hour of 2022-09-30 is thus denoted with the 01:00 o'clock timestamp, which is when that hour *ends*, not when it starts.
 
-* A peculiarity of the gas market can also be seen: daily values do not apply from midnight to midnight, but rather from 06:00 to 06:00. The values change with the timestamp ``2022-10-01 05:00:00+00:00``, which is ``2022-10-01 07:00:00+02:00``, which in Belvis denotes the time period from 06:00 to 07:00 (see previous point). 
+* A peculiarity of the gas market can also be seen: daily values do not apply from midnight to midnight, but rather from 06:00 to 06:00. The values change with the timestamp ``2022-10-01 05:00:00+00:00``, which is ``2022-10-01 07:00:00+02:00`` in the Europe/Berlin timezone, which in Belvis denotes the hour starting at 06:00 (see previous point). 
+
+More series
+-----------
+
+For convenience, the method ``.series_from_tsname()`` combines looking up the timeseries id with fetching the data. It is a thin wrapper around ``.series()``.
 
 --------------
 Timeseries IDs
 --------------
 
-For the methods above, the timeseries ID is needed. This is a number uniquely identifying a timeseries (including the portfolio that contains it) in the Belvis database.
+For most methods above, the timeseries ID is needed. This is a number uniquely identifying a timeseries (including the portfolio that contains it) in the Belvis database.
 
 In order to find the ``tsid``, several methods are available, depending on how much information is known about the timeseries.
 

@@ -149,6 +149,49 @@ class Tenant:
         pfl = pf.PfLine(data)
         return pfl.asfreq(self.structure.freq)
 
+    def general_pfl(
+        self,
+        pfid: str,
+        tsname: str,
+        ts_left: Union[str, pd.Timestamp, dt.datetime] = None,
+        ts_right: Union[str, pd.Timestamp, dt.datetime] = None,
+        missing2zero: bool = True,
+        debug: bool = False,
+    ) -> pf.PfLine:
+        """Retrieve a portfolio line with portfolio-specific volume and/or price data
+        from Belvis, without using the structure Use if wanted timeseries is not specified in the structure file.
+
+        Parameters
+        ----------
+        pfid : str
+            Id of portfolio as found in Belvis. Must be original.
+        tsname : str
+            Name of the timeseries. Must be exact.
+        ts_left : Union[str, pd.Timestamp, dt.datetime], optional
+        ts_right : Union[str, pd.Timestamp, dt.datetime], optional
+            Start and end of delivery period. If both omitted, uses the front year. If
+            one omitted, uses the start of the (same or following) year.
+        missing2zero : bool, optional (default: True)
+            What to do with values that are flagged as 'missing'. True to replace with 0,
+            False to replace with nan.
+        debug : bool, optional (default: False)
+            If True, stops after fetching timeseries data from api; before applying the
+            aftercare functions.
+
+        Returns
+        -------
+        pf.PfLine
+        """
+        # Fix timestamps.
+        ts_left, ts_right = pf.ts_leftright(ts_left, ts_right)
+        # Get ts tree and fetch data.
+        ts_tree = Ts(pfid, tsname)
+        self.api.series(ts_tree, ts_left, ts_right, missing2zero=missing2zero)
+        if debug:
+            return ts_tree
+        # Turn into portfolio line.
+        return self._pfline(ts_tree)
+
     def portfolio_pfl(
         self,
         pfid: str,
