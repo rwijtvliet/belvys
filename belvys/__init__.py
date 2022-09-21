@@ -2,7 +2,7 @@
 
 from . import _version, adjustment
 from .api import Api
-from .structure import Structure
+from .structure import Structure, TsTree, Ts
 from .tenant import Tenant
 from .example import (
     example_structure,
