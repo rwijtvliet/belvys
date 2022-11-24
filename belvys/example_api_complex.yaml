@@ -1,5 +1,5 @@
 server: http://belvisserver:8040   # Server and port of the rest API. 
-tenant: pfm_power                  # Name of tenant on this server.
+tenant: pfm_gas                    # Name of tenant on this server.
 cache:
   B2C_household:
     Offtake volume in MW: 6523

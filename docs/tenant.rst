@@ -21,7 +21,7 @@ A tenant can be initialised using a ``Structure`` and an ``Api`` instance. Conti
 
     # Define where and how to access the rest api.
     api = belvys.Api.from_file("apispec.yaml")
-    api.access_from_usr_pwd("First.Lastname", "my_5tr0ngp@ssw0rd")
+    api.access_from_usr_pwd("Myfirst.Lastname", "my_5tr0ngp@ssw0rd")
 
     # Create Tenant instance to query the data.
     tenant = belvys.Tenant(structure, api)
