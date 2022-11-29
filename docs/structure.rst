@@ -47,7 +47,7 @@ Alternatively, the specification can be stored in a ``yaml`` file, and used to i
 Usage
 -----
 
-When the instance has been created, we can see which data is available using several methods:
+When the instance has been created, several methods tell us which data we expect to be available in Belvis:
 
 * ``.available_pfids()`` returns which portfolios are specified:
 

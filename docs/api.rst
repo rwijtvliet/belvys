@@ -13,7 +13,7 @@ We must specify the server (and port) and the Belvis tenant that will give us th
 .. exec_code:: 
 
    import belvys
-   api = belvys.Api("belvisserver01:8080", "gas")
+   api = belvys.Api("belvisserver01:8040", "pfm_gas")
 
 We can also initialise from a configuration file, with the ``belvys.Api.from_file()`` class method. For the example above, the contents of the corresponing ``yaml``-file is
 
@@ -29,7 +29,7 @@ Before we can get any data from the belvis server, we need to authenicate with b
 .. code-block:: python
 
    # Continuation of previous example.
-   api.access_from_usr_pwd('Myfirst.Lastname', 'my!p@ssw0rd')
+   api.access_from_usr_pwd('Myfirst.Lastname', 'my_5tr0ngp@ssw0rd')
 
 .. warning:: Never store your username and password in a python file - e.g. use environment variables instead, and access those from the built-in ``os.environ`` dictionary.
 
@@ -123,16 +123,16 @@ For most methods above, the timeseries ID is needed. This is a number uniquely i
 
 In order to find the ``tsid``, several methods are available, depending on how much information is known about the timeseries.
 
-* ``all_ts()``: if only the portfolio is known, this method can be used. It returns a dictionary with the name and ID of *all* the timeseries in it.
+* ``all_ts()``: if only the portfolio is known, this method can be used. It returns a dictionary with the names and IDs of *all* the timeseries in it.
 
-* ``find_tsids()``: if the portfolio and part of the timeseries name is know, this method can be used. It returns the same kind of dictionary.
+* ``find_tsids()``: if the portfolio and part of the timeseries name is know, this method can be used. It returns the same kind of dictionary as ``all_ts()``.
 
 * ``find_tsid()``: if the portfolio and the exact timeseries name are known, this method is used. It returns the corresponding integer ID number.
 
 Cache
 -----
 
-To avoid repeating the (potentially time-intensive) task of finding the timeseries ID, the class keeps a cache. When a file is provided during the initialisation, it is used to persistently store the cache every time it is updated. (When initialising with ``.from_file()``, this file is automatically used for this purpose.)
+To avoid repeating the (potentially time-costly) task of finding the timeseries ID, the class keeps a cache. When a file is provided during the initialisation, it is used to persistently store the cache every time it is updated. (When initialising with ``.from_file()``, this file is automatically used for this purpose.)
 
 
 -------------------
