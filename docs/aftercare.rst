@@ -10,7 +10,9 @@ Motivation
 
 The ``Api.series()`` method returns a ``pandas`` Series (`documentation <https://pandas.pydata.org/docs/reference/api/pandas.Series.html>`_), which is close to how the data is returned by the Belvis Rest Api. In particular, the timestamps in the index are not altered in any way - they are simply put in a pandas ``DatetimeIndex``, without any timezone conversions or other changes.
 
-The ``Tenant.portfolio_pfl()`` and ``Tenant.price_pfl()`` methods, however, return a ``portfolyo`` PfLine (`documentation <https://portfolyo.readthedocs.io/en/latest/core/pfline.html>`_), and the series above are not always in the correct format to use as input for this class. With the help of the aftercare function, the series can be changed before being used as input.
+The ``Tenant.portfolio_pfl()`` and ``Tenant.price_pfl()`` methods, however, return a ``portfolyo`` PfLine (`documentation <https://portfolyo.readthedocs.io/en/latest/core/pfline.html>`_), and the series above are not always in the correct format to use as input for this class. 
+
+With the help of the aftercare function, the series can be changed before being used as input into ``PfLine``.
 
 ---------------------
 Necessary adjustments
@@ -45,10 +47,10 @@ Frequency
 
     .. code-block:: python
 
-        from portfolyo.tools import frames
+        import portfolyo as pf
 
         def infer_frequency(s: pandas.Series) -> pandas.Series:
-            return frames.set_frequency(s)  
+            return pf.tools.freq.set_to_frame(s)  
 
 Right-bound
 -----------
@@ -60,7 +62,7 @@ Right-bound
         def makeleft(s: pandas.Series) -> pandas.Series:
             td = s.index[1] - s.index[0]
             if td <= dt.timedelta(hours=2):
-                s.index = portfolyo.right_to_left(s.index)
+                s.index = pf.tools.righttoleft.index(s.index)
             return s
 
 Custom issues
