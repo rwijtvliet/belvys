@@ -40,7 +40,8 @@ Portfolio data
 .. code-block:: python
 
     # Continuation of previous example.
-    offtake = tenant.portfolio_pfl("B2C_household", "current_offtake", "2024-09-05", "2024-09-08")
+    start, end = pd.Timestamp("2024-09-05"), pd.Timestamp("2024-09-08")
+    offtake = tenant.portfolio_pfl("B2C_household", "current_offtake", start, end)
     offtake
 
 .. code-block:: text
@@ -70,7 +71,7 @@ Prices
 .. code-block:: python
 
     # Continuation of previous example.
-    prices = tenant.price_pfl("fwc_monthly_DE", "2024-09-05", "2024-09-08")
+    prices = tenant.price_pfl("fwc_monthly_DE", start, end)
     prices
 
 .. code-block:: text
@@ -101,7 +102,7 @@ For convenience, the method ``.general_pfl()`` exists. It can be used to fetch d
 .. code-block:: python
 
     # Continuation of previous example.
-    churn = tenant.general_pfl("B2C_Household", "Expected churn in MW", "2024-09-05", "2024-09-08")
+    churn = tenant.general_pfl("B2C_Household", "Expected churn in MW", start, end)
     churn
 
 .. code-block:: text
