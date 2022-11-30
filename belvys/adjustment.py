@@ -8,6 +8,7 @@ import pandas as pd
 import portfolyo as pf
 
 Adjustment = Callable[[pd.Series], pd.Series]
+Aftercare = Callable[[pd.Series, int, str, str], pd.Series]
 
 
 def fact_convert_to_tz(tz: str) -> Adjustment:

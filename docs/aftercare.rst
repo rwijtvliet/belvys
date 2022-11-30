@@ -22,6 +22,10 @@ Here are several characteristics of the timeseries returned by ``Api.series()`` 
 
 We present the adjustments as functions that all have the same signature. They take a pandas Series as their single input argument, and also return a pandas Series. Further below we will see, how we combine these adjustments into a single aftercare function. 
 
+.. code-block:: python
+
+    Adjustment = Callable[[pd.Series], pd.Series]
+
 Timezone
 --------
 
@@ -80,7 +84,7 @@ The aftercare function is a function that accepts 4 arguments: a pandas Series, 
     
     Aftercare = Callable[[pandas.Series, int, str, str], pandas.Series]
 
-The ``.aftercare`` attribute of the ``Tenant`` class is such an aftercare function. Whenever a timeseries is fetched from the Belvis REST API, this function is called on the output of the ``Api.series()`` method. The output should be timeseries from which a portfolio line (``portfolyo.PfLine``) can be initialized.
+The ``.aftercare`` attribute of the ``Tenant`` class is such an aftercare function. Whenever a timeseries is fetched from the Belvis REST API, this function is called on the output of the ``Api.series()`` method. The output should be a timeseries from which a portfolio line (``portfolyo.PfLine``) can be initialized.
 
 The final three arguments (``tsid``, ``pfid``, ``tsname``) are passed as well, and may be used in the function definition to apply certain adjustments only to a specific timeseries, as we'll see in the example below.
 

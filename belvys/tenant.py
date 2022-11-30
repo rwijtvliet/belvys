@@ -1,18 +1,17 @@
-import datetime as dt
 from collections import defaultdict
-from typing import Dict, Iterable, Union
+from typing import Dict, Iterable
 
 import pandas as pd
 import portfolyo as pf
 
 from . import adjustment
-from .adjustment import Adjustment
+from .adjustment import Aftercare
 from .api import Api
 from .common import print_status
 from .structure import Structure, Ts, TsTree
 
 
-def fact_default_aftercare(tz) -> Adjustment:
+def fact_default_aftercare(tz) -> Aftercare:
 
     convert_to_tz = adjustment.fact_convert_to_tz(tz)
 
@@ -47,6 +46,8 @@ class Tenant:
       (the timeseries id, the pfid, the timeseries name) can be used in the function
       definition to target that timeseries only. If they are not needed, ``*args`` may
       be used to "eat up" the unneeded parameters.
+    - There are several ready-made adjustment functions available in the ``belvys.adjustment``
+      module.
 
     If .portfolio_pfl() and .price_pfl() raise an Exception when creating the ``PfLine``
     instance, inspect the series that the PfLine receives as input, by setting their
@@ -87,11 +88,11 @@ class Tenant:
         self._api = api
 
     @property
-    def aftercare(self) -> Adjustment:
+    def aftercare(self) -> Aftercare:
         return self._aftercare
 
     @aftercare.setter
-    def aftercare(self, aftercare: Adjustment) -> None:
+    def aftercare(self, aftercare: Aftercare) -> None:
         self._aftercare = aftercare
 
     # ---
@@ -153,8 +154,8 @@ class Tenant:
         self,
         pfid: str,
         tsname: str,
-        ts_left: Union[str, pd.Timestamp, dt.datetime] = None,
-        ts_right: Union[str, pd.Timestamp, dt.datetime] = None,
+        ts_left: pd.Timestamp,
+        ts_right: pd.Timestamp,
         missing2zero: bool = True,
         debug: bool = False,
     ) -> pf.PfLine:
@@ -167,10 +168,10 @@ class Tenant:
             Id of portfolio as found in Belvis. Must be original.
         tsname : str
             Name of the timeseries. Must be exact.
-        ts_left : Union[str, pd.Timestamp, dt.datetime], optional
-        ts_right : Union[str, pd.Timestamp, dt.datetime], optional
-            Start and end of delivery period. If both omitted, uses the front year. If
-            one omitted, uses the start of the (same or following) year.
+        ts_left : pd.Timestamp
+            Start of delivery period (incl)
+        ts_right : pd.Timestamp
+            End of delivery period (excl)
         missing2zero : bool, optional (default: True)
             What to do with values that are flagged as 'missing'. True to replace with 0,
             False to replace with nan.
@@ -182,8 +183,6 @@ class Tenant:
         -------
         pf.PfLine
         """
-        # Fix timestamps.
-        ts_left, ts_right = pf.tools.leftandright.stamps(ts_left, ts_right)
         # Get ts tree and fetch data.
         ts_tree = Ts(pfid, tsname)
         self.api.series(ts_tree, ts_left, ts_right, missing2zero=missing2zero)
@@ -196,8 +195,8 @@ class Tenant:
         self,
         pfid: str,
         pflineid: str,
-        ts_left: Union[str, pd.Timestamp, dt.datetime] = None,
-        ts_right: Union[str, pd.Timestamp, dt.datetime] = None,
+        ts_left: pd.Timestamp,
+        ts_right: pd.Timestamp,
         missing2zero: bool = True,
         *,
         debug: bool = False,
@@ -211,10 +210,10 @@ class Tenant:
             Id of portfolio as defined in .Structure. May be original or synthetic.
         pflineid : str
             Id of portfolio line as defined in .structure
-        ts_left : Union[str, pd.Timestamp, dt.datetime], optional
-        ts_right : Union[str, pd.Timestamp, dt.datetime], optional
-            Start and end of delivery period. If both omitted, uses the front year. If
-            one omitted, uses the start of the (same or following) year.
+        ts_left : pd.Timestamp
+            Start of delivery period (incl)
+        ts_right : pd.Timestamp
+            End of delivery period (excl)
         missing2zero : bool, optional (default: True)
             What to do with values that are flagged as 'missing'. True to replace with 0,
             False to replace with nan.
@@ -226,8 +225,6 @@ class Tenant:
         -------
         pf.PfLine
         """
-        # Fix timestamps.
-        ts_left, ts_right = pf.tools.leftandright.stamps(ts_left, ts_right)
         # Get ts trees and fetch data.
         ts_trees = []
         for pfid in self.structure.to_original_pfids(pfid):
@@ -245,8 +242,8 @@ class Tenant:
     def price_pfl(
         self,
         priceid: str,
-        ts_left: Union[str, pd.Timestamp, dt.datetime] = None,
-        ts_right: Union[str, pd.Timestamp, dt.datetime] = None,
+        ts_left: pd.Timestamp,
+        ts_right: pd.Timestamp,
         missing2zero: bool = True,
         *,
         debug: bool = False,
@@ -257,10 +254,10 @@ class Tenant:
         ----------
         priceid : str
             Id of price timeseries as defined in .structure
-        ts_left : Union[str, pd.Timestamp, dt.datetime], optional
-        ts_right : Union[str, pd.Timestamp, dt.datetime], optional
-            Start and end of delivery period. If both omitted, uses the front year. If
-            one omitted, uses the start of the (same or following) year.
+        ts_left : pd.Timestamp
+            Start of delivery period (incl)
+        ts_right : pd.Timestamp
+            End of delivery period (excl)
         missing2zero : bool, optional (default: True)
             What to do with values that are flagged as 'missing'. True to replace with 0,
             False to replace with nan.
@@ -269,8 +266,6 @@ class Tenant:
         -------
         pf.PfLine
         """
-        # Fix timestamps.
-        ts_left, ts_right = pf.tools.leftandright.stamps(ts_left, ts_right)
         # Get ts trees and fetch data.
         ts_tree = self.structure.tstree_price(priceid)
         self._fetch_series(ts_tree, ts_left, ts_right, missing2zero=missing2zero)
