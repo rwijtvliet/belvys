@@ -8,8 +8,8 @@ import portfolyo as pf
 from . import adjustment
 from .adjustment import Adjustment
 from .api import Api
-from .structure import Structure, Ts, TsTree
 from .common import print_status
+from .structure import Structure, Ts, TsTree
 
 
 def fact_default_aftercare(tz) -> Adjustment:
@@ -183,7 +183,7 @@ class Tenant:
         pf.PfLine
         """
         # Fix timestamps.
-        ts_left, ts_right = pf.ts_leftright(ts_left, ts_right)
+        ts_left, ts_right = pf.tools.leftandright.stamps(ts_left, ts_right)
         # Get ts tree and fetch data.
         ts_tree = Ts(pfid, tsname)
         self.api.series(ts_tree, ts_left, ts_right, missing2zero=missing2zero)
@@ -227,7 +227,7 @@ class Tenant:
         pf.PfLine
         """
         # Fix timestamps.
-        ts_left, ts_right = pf.ts_leftright(ts_left, ts_right)
+        ts_left, ts_right = pf.tools.leftandright.stamps(ts_left, ts_right)
         # Get ts trees and fetch data.
         ts_trees = []
         for pfid in self.structure.to_original_pfids(pfid):
@@ -270,7 +270,7 @@ class Tenant:
         pf.PfLine
         """
         # Fix timestamps.
-        ts_left, ts_right = pf.ts_leftright(ts_left, ts_right)
+        ts_left, ts_right = pf.tools.leftandright.stamps(ts_left, ts_right)
         # Get ts trees and fetch data.
         ts_tree = self.structure.tstree_price(priceid)
         self._fetch_series(ts_tree, ts_left, ts_right, missing2zero=missing2zero)

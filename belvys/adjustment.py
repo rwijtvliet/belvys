@@ -6,7 +6,6 @@ from typing import Callable
 
 import pandas as pd
 import portfolyo as pf
-from portfolyo.tools import frames
 
 Adjustment = Callable[[pd.Series, int, str, str], pd.Series]
 Adjustment = Callable[[pd.Series], pd.Series]
@@ -105,7 +104,7 @@ def fact_frequency(freq: str) -> Adjustment:
     can be inferred."""
 
     def adjustment(s: pd.Series) -> pd.Series:
-        return frames.set_frequency(s, freq)
+        return pf.tools.freq.set_to_frame(s, freq)
 
     return adjustment
 
@@ -121,7 +120,7 @@ def makeleft(s: pd.Series) -> pd.Series:
     first two timestamps."""
     td = s.index[1] - s.index[0]
     if td <= dt.timedelta(hours=2):
-        s.index = pf.right_to_left(s.index)
+        s.index = pf.tools.righttoleft.index(s.index)
     return s
 
 

@@ -30,7 +30,7 @@ A tenant can be initialised using a ``Structure`` and an ``Api`` instance. Conti
 Usage
 -----
 
-The most important methods are ``.portfolio_pfl()``, ``.price_pfl()``, and ``general_pfl()``. All return a ``portfolyo.PfLine`` (see `here <portfolyo.readthedocs.io>`_) instance. Here we see how they are used to get data for the 3-day (left-closed) time period from midnight 2022-09-05 until midnight 2022-09-08.
+The most important methods are ``.portfolio_pfl()``, ``.price_pfl()``, and ``general_pfl()``. All return a ``portfolyo.PfLine`` (see `here <portfolyo.readthedocs.io>`_) instance. Here we see how they are used to get data for the 3-day (left-closed) time period from midnight 2024-09-05 until midnight 2024-09-08.
 
 Portfolio data
 --------------
@@ -40,27 +40,27 @@ Portfolio data
 .. code-block:: python
 
     # Continuation of previous example.
-    offtake = tenant.portfolio_pfl("B2C_household", "current_offtake", "2022-09-05", "2022-09-08")
+    offtake = tenant.portfolio_pfl("B2C_household", "current_offtake", "2024-09-05", "2024-09-08")
     offtake
 
 .. code-block:: text
 
     PfLine object with volume information.
-    . Timestamps: first: 2022-09-05 00:00:00+02:00     timezone: Europe/Berlin
-                   last: 2022-09-07 23:45:00+02:00         freq: <15 * Minutes> (288 datapoints)
-                                         w           q
-                                        MW         MWh
+    . Start: 2024-09-05 00:00:00+02:00 (incl)    . Timezone    : Europe/Berlin  
+    . End  : 2024-09-08 00:00:00+02:00 (excl)    . Start-of-day: 00:00:00  
+    . Freq : <15 * Minutes> (288 datapoints)
+                                        w            q
+                                       MW          MWh
 
-    2022-09-05 00:00:00 +0200        -99.4         -25
-    2022-09-05 00:15:00 +0200        -98.4         -25
-    2022-09-05 00:30:00 +0200        -97.3         -24
-    2022-09-05 00:45:00 +0200        -95.9         -24
-    2022-09-05 01:00:00 +0200        -95.3         -24
+    2024-09-05 00:00:00 +0200        -67.8         -17
+    2024-09-05 00:15:00 +0200        -61.3         -15
+    2024-09-05 00:30:00 +0200        -55.5         -14
+    2024-09-05 00:45:00 +0200        -50.9         -13
     ..                                  ..          ..
-    2022-09-07 23:00:00 +0200       -112.4         -28
-    2022-09-07 23:15:00 +0200       -109.8         -27
-    2022-09-07 23:30:00 +0200       -107.3         -27
-    2022-09-07 23:45:00 +0200       -105.7         -26
+    2024-09-07 23:00:00 +0200       -105.7         -26
+    2024-09-07 23:15:00 +0200        -98.9         -25
+    2024-09-07 23:30:00 +0200        -91.4         -23
+    2024-09-07 23:45:00 +0200        -84.0         -21
 
 Prices
 ------
@@ -70,27 +70,27 @@ Prices
 .. code-block:: python
 
     # Continuation of previous example.
-    prices = tenant.price_pfl("fwc_monthly_DE", "2022-09-05", "2022-09-08")
+    prices = tenant.price_pfl("fwc_monthly_DE", "2024-09-05", "2024-09-08")
     prices
 
 .. code-block:: text
 
     PfLine object with price information.
-    . Timestamps: first: 2022-09-05 00:00:00+02:00     timezone: Europe/Berlin
-                   last: 2022-09-07 23:45:00+02:00         freq: <15 * Minutes> (288 datapoints)
+    . Start: 2024-09-05 00:00:00+02:00 (incl)    . Timezone    : Europe/Berlin  
+    . End  : 2024-09-08 00:00:00+02:00 (excl)    . Start-of-day: 00:00:00  
+    . Freq : <15 * Minutes> (288 datapoints)
                                         p
                                   Eur/MWh
 
-    2022-09-05 00:00:00 +0200      274.89
-    2022-09-05 00:15:00 +0200      250.00
-    2022-09-05 00:30:00 +0200      257.86
-    2022-09-05 00:45:00 +0200      215.83
-    2022-09-05 01:00:00 +0200      249.90
+    2024-09-05 00:00:00 +0200      209.31
+    2024-09-05 00:15:00 +0200      189.06
+    2024-09-05 00:30:00 +0200      169.01
+    2024-09-05 00:45:00 +0200      147.89
     ..                                 ..
-    2022-09-07 23:00:00 +0200      499.12
-    2022-09-07 23:15:00 +0200      433.34
-    2022-09-07 23:30:00 +0200      377.55
-    2022-09-07 23:45:00 +0200      295.72
+    2024-09-07 23:00:00 +0200      198.68
+    2024-09-07 23:15:00 +0200      175.70
+    2024-09-07 23:30:00 +0200      152.81
+    2024-09-07 23:45:00 +0200      123.77
 
 
 General
@@ -101,34 +101,34 @@ For convenience, the method ``.general_pfl()`` exists. It can be used to fetch d
 .. code-block:: python
 
     # Continuation of previous example.
-    churn = tenant.general_pfl("B2C_Household", "Expected churn in MW", "2022-09-05", "2022-09-08")
+    churn = tenant.general_pfl("B2C_Household", "Expected churn in MW", "2024-09-05", "2024-09-08")
     churn
 
 .. code-block:: text
 
     PfLine object with volume information.
-    . Timestamps: first: 2022-09-05 00:00:00+02:00     timezone: Europe/Berlin
-                   last: 2022-09-07 23:45:00+02:00         freq: <15 * Minutes> (288 datapoints)
+    . Start: 2024-09-05 00:00:00+02:00 (incl)    . Timezone    : Europe/Berlin  
+    . End  : 2024-09-08 00:00:00+02:00 (excl)    . Start-of-day: 00:00:00  
+    . Freq : <15 * Minutes> (288 datapoints)
                                          w           q
                                         MW         MWh
-
-    2022-09-05 00:00:00 +0200         -9.9        -2.5
-    2022-09-05 00:15:00 +0200         -9.8        -2.5
-    2022-09-05 00:30:00 +0200         -9.7        -2.4
-    2022-09-05 00:45:00 +0200         -9.5        -2.4
-    2022-09-05 01:00:00 +0200         -9.5        -2.4
+    
+    2024-09-05 00:00:00 +0200         -6.8          -2
+    2024-09-05 00:15:00 +0200         -6.1          -2
+    2024-09-05 00:30:00 +0200         -5.6          -1
+    2024-09-05 00:45:00 +0200         -5.1          -1
     ..                                  ..          ..
-    2022-09-07 23:00:00 +0200        -11.2        -2.8
-    2022-09-07 23:15:00 +0200        -10.9        -2.7
-    2022-09-07 23:30:00 +0200        -10.7        -2.7
-    2022-09-07 23:45:00 +0200        -10.5        -2.6
+    2024-09-07 23:00:00 +0200        -10.6          -3
+    2024-09-07 23:15:00 +0200         -9.9          -2
+    2024-09-07 23:30:00 +0200         -9.1          -2
+    2024-09-07 23:45:00 +0200         -8.4          -2
 
 
 -----
 Cache
 -----
 
-As mentioned in the :doc:`api` documentation, it can be time-consuming querying the api for timeseries IDs. Even if these are cached, it might be a good idea to explicitly fill the cache beforehand. This can be done using the ``.update_cache()`` menthod. It finds all timeseries in each of the relevant portfolios, and stores their ID in the cache. Any subsequent queries will therefore only use the API to find the *values* of the timeseries - which cannot be cached, as they constantly change.
+As mentioned in the :doc:`api` documentation, it can be time-consuming querying the api for timeseries IDs. Even if these are cached, it might be a good idea to explicitly fill the cache beforehand. This can be done using the ``.update_cache()`` menthod. It finds all timeseries in each of the relevant portfolios, and stores their ID in the cache. Any subsequent queries will therefore only use the API to find the *values* of the timeseries - which cannot be cached (because there is many data, which also constantly changes).
 
 Here too: if a file is specified when initialising the ``Api`` instance, or if the instance is initialised from a file (``Api.from_file()``), the cache is stored there and can be reused when the program ends.
 
