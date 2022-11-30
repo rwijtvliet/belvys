@@ -7,7 +7,6 @@ from typing import Callable
 import pandas as pd
 import portfolyo as pf
 
-Adjustment = Callable[[pd.Series, int, str, str], pd.Series]
 Adjustment = Callable[[pd.Series], pd.Series]
 
 
