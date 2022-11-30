@@ -3,6 +3,6 @@ pandas
 numpy
 requests
 tqdm
-portfolyo==0.4
+portfolyo==0.4.1
 python-forge
 versioneer
