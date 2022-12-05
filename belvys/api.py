@@ -407,7 +407,7 @@ class Api:
         df = pd.DataFrame.from_records(records)
         # Replace missing values.
         mask = df["pf"] == "missing"
-        df.loc[mask, "v"] = 0 if missing2zero else np.nan
+        df.loc[mask, "v"] = 0.0 if missing2zero else np.nan
         # Find unit.
         unit = metadata["measurementUnit"]
         # Turn into series.
