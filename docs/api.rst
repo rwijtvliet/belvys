@@ -125,7 +125,7 @@ In order to find the ``tsid``, several methods are available, depending on how m
 
 * ``all_ts()``: if only the portfolio is known, this method can be used. It returns a dictionary with the names and IDs of *all* the timeseries in it.
 
-* ``find_tsids()``: if the portfolio and part of the timeseries name is know, this method can be used. It returns the same kind of dictionary as ``all_ts()``.
+* ``find_tsids()``: if the portfolio and part of the timeseries name is known, this method can be used. It returns the same kind of dictionary as ``all_ts()``.
 
 * ``find_tsid()``: if the portfolio and the exact timeseries name are known, this method is used. It returns the corresponding integer ID number.
 

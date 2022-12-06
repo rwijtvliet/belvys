@@ -278,7 +278,7 @@ class Api:
         pfid: str,
         tsname: str = "",
         case_sensitive: bool = True,
-        allow_partial: bool = False,
+        allow_partial: bool = True,
     ) -> Dict[str, int]:
         """Use API to find specific timeseries in a Belvis portfolio. May take a long
         time if portfolio has many timeseries.
@@ -291,7 +291,7 @@ class Api:
             Name of timeseries.
         case_sensitive : bool, optional (default: True)
             If True, do a case sensitive search for the timeseries name.
-        allow_partial : bool, optional (default: False)
+        allow_partial : bool, optional (default: True)
             If True, also returns timeseries if the name partially matches.
 
         Returns
@@ -339,7 +339,7 @@ class Api:
             f"Timeseries '{tsname}' in portfolio '{pfid}' not found. If cache is complete and"
             " up to date, this should not happen, and ``pfid`` or ``tsname`` may be incorrect."
         )
-        hits = self.find_tsids(pfid, tsname)
+        hits = self.find_tsids(pfid, tsname, allow_partial=False)
         # Raise error if 0 or > 1 found.
         if len(hits) == 0:
             raise ValueError(
