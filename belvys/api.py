@@ -277,7 +277,7 @@ class Api:
         self,
         pfid: str,
         tsname: str = "",
-        case_insensitive: bool = False,
+        case_sensitive: bool = True,
         allow_partial: bool = False,
     ) -> Dict[str, int]:
         """Use API to find specific timeseries in a Belvis portfolio. May take a long
@@ -289,8 +289,8 @@ class Api:
             Id (= short name) of Belvis portfolio.
         tsname : str, optional (default: return all timeseries).
             Name of timeseries.
-        case_insensitive : bool, optional (default: False)
-            If True, do a case insensitive search for the timeseries name.
+        case_sensitive : bool, optional (default: True)
+            If True, do a case sensitive search for the timeseries name.
         allow_partial : bool, optional (default: False)
             If True, also returns timeseries if the name partially matches.
 
@@ -300,13 +300,16 @@ class Api:
             Dictionary with found timeseries. Keys are the timeseries names, the values are
             the timeseries ids.
         """
-        if case_insensitive:
+        if not case_sensitive:
             tsname = tsname.lower()
 
         def matchingname(found: str) -> bool:
-            if case_insensitive:
+            if not case_sensitive:
                 found = found.lower()
-            return tsname in found if allow_partial else tsname == found
+            if allow_partial:
+                return tsname in found
+            else:
+                return tsname == found
 
         # Filter on timeseries name.
         all_ts = self.all_ts(pfid)
