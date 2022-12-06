@@ -185,7 +185,7 @@ class Tenant:
         """
         # Get ts tree and fetch data.
         ts_tree = Ts(pfid, tsname)
-        self.api.series(ts_tree, ts_left, ts_right, missing2zero=missing2zero)
+        self._fetch_series(ts_tree, ts_left, ts_right, missing2zero=missing2zero)
         if debug:
             return ts_tree
         # Turn into portfolio line.
