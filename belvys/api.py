@@ -414,7 +414,9 @@ class Api:
         # Find unit.
         unit = metadata["measurementUnit"]
         # Turn into series.
-        s = pd.Series(df["v"].to_list(), pd.DatetimeIndex(df["ts"]), f"pint[{unit}]")
+        # (int ->) float -> pint to suppress conversion warning
+        values, index = df["v"].to_list(), pd.DatetimeIndex(df["ts"])
+        s = pd.Series(values, index, float).astype(f"pint[{unit}]")
         s.index.freq = pd.infer_freq(s.index)
         return s
 
