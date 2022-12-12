@@ -218,7 +218,9 @@ class Api:
             self.access.authenticate()
             return self.query(url)  # retry.
         else:
-            raise RuntimeError(response)
+            raise RuntimeError(
+                f"Request to url {url} failed; server response: {response}."
+            )
 
     def metadata(self, tsid: int) -> Dict:
         """Get information about timeseries.
