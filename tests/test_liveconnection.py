@@ -4,11 +4,12 @@ import datetime as dt
 import os
 from typing import Iterable
 
-import belvys
 import pytest
 
+import belvys
 
-def gettennants() -> Iterable[belvys.Tenant]:
+
+def gettenants() -> Iterable[belvys.Tenant]:
     """Create tenants from data in environment variables."""
 
     def get_environ(key):
@@ -19,7 +20,7 @@ def gettennants() -> Iterable[belvys.Tenant]:
 
     try:
         usr, pwd, server = (
-            get_environ(key) for key in ("BELVIS_USER", "BELVIS_PWD", "BELVIS_SERVER_1")
+            get_environ(key) for key in ("BELVIS_USR", "BELVIS_PWD", "BELVIS_SERVER_1")
         )
     except ValueError:
         return []
@@ -51,7 +52,7 @@ def gettennants() -> Iterable[belvys.Tenant]:
     return tenants
 
 
-@pytest.mark.parametrize("tenant", gettennants())
+@pytest.mark.parametrize("tenant", gettenants())
 def test_all_pflines(tenant: belvys.Tenant):
     ts_left = dt.date.today() - dt.timedelta(days=30)
     ts_right = dt.date.today() + dt.timedelta(days=30)
