@@ -33,7 +33,7 @@ def create_tstree(pfid: str, tsname_tree: TsNameTree) -> TsTree:
 
 
 @dataclass
-class Portfolios:
+class Portfolios(frozen=True):
     original: Iterable[str]
     synthetic: Dict[str, Union[str, Iterable[str]]] = field(default_factory=dict)
 
