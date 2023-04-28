@@ -8,9 +8,9 @@ As part of the :doc:`tenant` class, we can specify an "aftercare" function.
 Motivation
 ----------
 
-The ``Api.series()`` method returns a ``pandas`` Series (`documentation <https://pandas.pydata.org/docs/reference/api/pandas.Series.html>`_), which is close to how the data is returned by the Belvis Rest Api. In particular, the timestamps in the index are not altered in any way - they are simply put in a pandas ``DatetimeIndex``, without any timezone conversions or other changes.
+The ``Api.series()`` method returns a ``pandas`` `Series <https://pandas.pydata.org/docs/reference/api/pandas.Series.html>`_, which is close to how the data is returned by the Belvis Rest Api. In particular, the timestamps in the index are not altered in any way - they are simply put in a pandas ``DatetimeIndex``, without any timezone conversions or other changes.
 
-The ``Tenant.portfolio_pfl()`` and ``Tenant.price_pfl()`` methods, however, return a ``portfolyo`` PfLine (`documentation <https://portfolyo.readthedocs.io/en/latest/core/pfline.html>`_), and the series above are not always in the correct format to use as input for this class. 
+The ``Tenant.portfolio_pfl()`` and ``Tenant.price_pfl()`` methods, however, return a ``portfolyo`` `PfLine  <https://portfolyo.readthedocs.io/en/latest/core/pfline.html>`_, and the series above are not always in the correct format to use as input for this class. 
 
 With the help of the aftercare function, the series can be changed before being used as input into ``PfLine``.
 
