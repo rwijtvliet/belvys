@@ -86,9 +86,9 @@ When the instance has been created, several methods tell us which data we expect
       # --- hide: start ---
       print(structure.available_priceids())
 
---------------
+---------------
 Complex example
---------------
+---------------
 
 The example shown above is a basic one. Here is a more complex example file, which shows all possibilities to specify a ``Structure``.
 
