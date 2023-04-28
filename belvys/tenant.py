@@ -123,15 +123,39 @@ class Tenant:
     def _pfline(self, ts_tree: TsTree) -> pf.PfLine:
         """Create a portfolio line from the data stored in the ts_tree series."""
 
-        # MultiPfLine.
+        # NestedPfLine.
 
         if isinstance(ts_tree, Dict):
             children = {}
             for name, subtree in ts_tree.items():
                 children[name] = self._pfline(subtree)
+
+            # Turn all revenue-only pflines into complete pflines.
+            children = {
+                name: child | pf.Q_(0.0, "MW")
+                if child.kind is pf.Kind.REVENUE
+                else child
+                for name, child in children.items()
+            }
             return pf.PfLine(children)
 
-        # SinglePfLine.
+            # TODO: use code below once portfolyo allows for NestedPfLine | 0 MW.
+            kinds = set([child.kind for child in children.values()])
+            if len(kinds) == 1:
+                return pf.PfLine(children)
+
+            def make_complete(pfl: pf.PfLine):
+                if pfl.kind in (pf.Kind.REVENUE, pf.Kind.PRICE):
+                    return pfl | pf.Q_(0, "MW")
+                elif pfl.kind is pf.Kind.VOLUME:
+                    return pfl | pf.Q_(0, "Eur/MWh")
+                return pfl  # pfl.kind is pf.Kind.COMPLETE
+
+            return pf.PfLine(
+                {name: make_complete(child) for name, child in children.items()}
+            )
+
+        # FlatPfLine.
 
         tss = [ts_tree] if isinstance(ts_tree, Ts) else ts_tree
         # Collect the timeseries values from Belvis.
@@ -234,10 +258,7 @@ class Tenant:
         if debug:
             return ts_trees
         # Turn into portfolio line.
-        pflines = []
-        for ts_tree in ts_trees:
-            pflines.append(self._pfline(ts_tree))
-        return sum(pflines)
+        return sum([self._pfline(ts_tree) for ts_tree in ts_trees])
 
     def price_pfl(
         self,

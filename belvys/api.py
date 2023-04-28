@@ -219,7 +219,8 @@ class Api:
             return self.query(url)  # retry.
         else:
             raise RuntimeError(
-                f"Request to url {url} failed; server response: {response}."
+                f"Request to url {url} failed; server response: {response or '(None)'}"
+                f" (status code {response.status_code})."
             )
 
     def metadata(self, tsid: int) -> Dict:
