@@ -61,7 +61,7 @@ class Portfolios:
             )
 
 
-@dataclass
+@dataclass(frozen=True)
 class Structure:
     """Structure of the belvis database; which portfolios and timeseries are of interest.
 
@@ -135,13 +135,15 @@ class Structure:
 
     def __post_init__(self):
         # Finish initialisation.
-        self.portfolios = Portfolios(**self.portfolios)
+        portfolios = Portfolios(**self.portfolios)
+        object.__setattr__(self, "portfolios", portfolios)  # because frozen
 
         # Ensure pflines part is correct.
-        self.pflines = {
+        pflines = {
             pflineid: self._expand_tree(tsname_tree)
             for pflineid, tsname_tree in self.pflines.items()
         }
+        object.__setattr__(self, "pflines", pflines)  # because frozen
 
         # Assert corrections part is valid.
         for pfid, pflinesdict in self.corrections.items():
@@ -188,23 +190,23 @@ class Structure:
             Names of timeseries that must be fetched.
         """
         if pfid not in (avail := self.available_pfids(True)):
-            raise ValueError(f"``pfid`` must one of {', '.join(avail)}.")
-
-        # Use correction, if it exists.
-        tsname_tree = self.corrections.get(pfid, {}).get(pflineid, "notfound")
-        if tsname_tree is None:
             raise ValueError(
-                f"The portfolio line ({pflineid}) does not exists for this portfolio ({pfid})."
+                f"The portfolio id ({pfid}) does not exist in this Structure instance;"
+                f" ``pfid`` must be one of {', '.join(avail)}."
             )
-        elif tsname_tree != "notfound":
+        if pflineid not in (avail := self.available_pflineids(pfid)):
+            raise ValueError(
+                f"The portfolio line ({pflineid}) does not exists for this portfolio ({pfid});"
+                f" ``pflineid`` must be one of {', '.join(avail)}."
+            )
+
+        # Use correction, if a correction is defined for this pfid and pflineid.
+        tsname_tree = self.corrections.get(pfid, {}).get(pflineid, "notfound")
+        if tsname_tree != "notfound":
             return create_tstree(pfid, tsname_tree)
 
         # If not, use default.
-        tsname_tree = self.pflines.get(pflineid, None)
-        if tsname_tree is None:
-            raise ValueError(
-                f"The portfolio line ({pflineid}) does not exists for this portfolio ({pfid})."
-            )
+        tsname_tree = self.pflines.get(pflineid, None)  # key should always exist
         return create_tstree(pfid, tsname_tree)
 
     def tstree_price(self, priceid: str) -> TsTree:
@@ -259,18 +261,21 @@ class Structure:
         Iterable[str]
             List of original portfolio ids.
         """
+        if pfid not in (avail := self.available_pfids()):
+            raise ValueError(
+                f"The portfolio id ({pfid}) does not exist in this Structure instance;"
+                f" ``pfid`` must be one of {', '.join(avail)}."
+            )
+
         if pfid in self.portfolios.original:
             return [pfid]
-        elif pfid in self.portfolios.synthetic:
-            pfids = []
-            for child_pfid in self.portfolios.synthetic[pfid]:
-                for pfid in self.to_original_pfids(child_pfid):
-                    pfids.append(pfid)
-            return pfids
-        raise ValueError(
-            f"Could not find portfolio id {pfid} in configuration for this tenant; "
-            f"expected one of {', '.join((*self.portfolios.original, *self.portfolios.synthetic))}."
-        )
+
+        # pfid in self.portfolios.sythetic
+        original_pfids = []
+        for child_pfid in self.portfolios.synthetic[pfid]:
+            for original_pfid in self.to_original_pfids(child_pfid):
+                original_pfids.append(original_pfid)
+        return original_pfids
 
     def available_pflineids(self, pfid: str) -> Iterable[str]:
         """All available portfolio line ids for a given portfolio.
