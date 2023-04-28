@@ -71,6 +71,8 @@ class Access:
 class Api:
     """A class to interact with a Belvis Rest API server."""
 
+    __slots__ = ["_retry", "_server", "_tenant", "_cache", "_filepath", "_access"]
+
     @classmethod
     def from_file(cls, filepath: Union[str, pathlib.Path]) -> Api:
         """Load api data from file.
