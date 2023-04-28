@@ -1,7 +1,7 @@
 sphinx
 sphinx-autobuild
 # These are dependencies of various sphinx extensions for documentation.
-ipython
+ipython==8.12 # readthedocs needs python <=3.8, and this only works with ipython <=8.12
 matplotlib
 numpydoc
 sphinx-copybutton
