@@ -258,7 +258,7 @@ class Tenant:
         if debug:
             return ts_trees
         # Turn into portfolio line.
-        return sum([self._pfline(ts_tree) for ts_tree in ts_trees])
+        return sum([self._pfline(ts_tree) for ts_tree in ts_trees], None)
 
     def price_pfl(
         self,
