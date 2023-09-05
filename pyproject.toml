@@ -20,6 +20,7 @@ black = "^23.7.0"
 flake8 = "^6.1.0"
 twine = "^4.0.2"
 pre-commit = "^3.4.0"
+ipykernel = "^6.25.2"
 
 
 [tool.poetry.group.test.dependencies]
