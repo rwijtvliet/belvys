@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import Dict, Iterable
+from typing import Dict, Iterable, List, Union
 
 import pandas as pd
 import portfolyo as pf
@@ -10,9 +10,10 @@ from .api import Api
 from .common import print_status
 from .structure import Structure, Ts, TsTree
 
+SeriesTree = Union[pd.Series, Iterable[pd.Series], Dict[str, "SeriesTree"]]
+
 
 def fact_default_aftercare(tz) -> Aftercare:
-
     convert_to_tz = adjustment.fact_convert_to_tz(tz)
 
     def aftercare(s: pd.Series, tsid: int, pfid: str, tsname: str) -> pd.Series:
@@ -51,7 +52,7 @@ class Tenant:
 
     If .portfolio_pfl() and .price_pfl() raise an Exception when creating the ``PfLine``
     instance, inspect the series that the PfLine receives as input, by setting their
-    ``debug`` parameter to True.
+    ``output_series`` parameter to True.
     """
 
     def __init__(self, structure: Structure = None, api: Api = None):
@@ -120,15 +121,15 @@ class Tenant:
             for branch in ts_tree:
                 self._fetch_series(branch, ts_left, ts_right, **kwargs)
 
-    def _pfline(self, ts_tree: TsTree) -> pf.PfLine:
-        """Create a portfolio line from the data stored in the ts_tree series."""
+    def _pfline(self, series_tree: SeriesTree) -> pf.PfLine:
+        """Create a portfolio line from the data stored in the series_tree."""
 
         # NestedPfLine.
 
-        if isinstance(ts_tree, Dict):
-            children = {}
-            for name, subtree in ts_tree.items():
-                children[name] = self._pfline(subtree)
+        if isinstance(series_tree, Dict):
+            children = {
+                name: self._pfline(subtree) for name, subtree in series_tree.items()
+            }
 
             # Turn all revenue-only pflines into complete pflines.
             children = {
@@ -157,22 +158,24 @@ class Tenant:
 
         # FlatPfLine.
 
-        tss = [ts_tree] if isinstance(ts_tree, Ts) else ts_tree
-        # Collect the timeseries values from Belvis.
-        series_by_dimension = defaultdict(list)
-        for ts in tss:
-            s = ts.series  # series as returned by api.
-            # Here we make corrections for design decisions in our Belvis database.
-            if self.aftercare is not None:
-                s = self.aftercare(s, ts.tsid, ts.pfid, ts.name)
-            # Sort by dimensionality.
-            dim = s.pint.dimensionality
-            series_by_dimension[dim].append(s)
-        # Sum to get one series per dimension.
-        data = [sum(s) for s in series_by_dimension.values()]
-        # Turn into portfolio line at wanted frequency.
-        pfl = pf.PfLine(data)
+        pfl = pf.PfLine(series_tree)
         return pfl.asfreq(self.structure.freq)
+
+        # tss = [ts_tree] if isinstance(ts_tree, Ts) else ts_tree
+        # # Collect the timeseries values from Belvis.
+        # series_by_dimension = defaultdict(list)
+        # for ts in tss:
+        #     s = ts.series  # series as returned by api.
+        #     # Here we make corrections for design decisions in our Belvis database.
+        #     if self.aftercare is not None:
+        #         s = self.aftercare(s, ts.tsid, ts.pfid, ts.name)
+        #     # Sort by dimensionality.
+        #     dim = s.pint.dimensionality
+        #     series_by_dimension[dim].append(s)
+        # # Sum to get one series per dimension.
+        # data = [sum(s) for s in series_by_dimension.values()]
+        # # Turn into portfolio line at wanted frequency.
+        # pfl = pf.PfLine(data)
 
     def general_pfl(
         self,
@@ -181,7 +184,7 @@ class Tenant:
         ts_left: pd.Timestamp,
         ts_right: pd.Timestamp,
         missing2zero: bool = True,
-        debug: bool = False,
+        output_as_series: bool = False,
     ) -> pf.PfLine:
         """Retrieve a portfolio line with portfolio-specific volume and/or price data
         from Belvis, without using the structure Use if wanted timeseries is not specified in the structure file.
@@ -199,9 +202,9 @@ class Tenant:
         missing2zero : bool, optional (default: True)
             What to do with values that are flagged as 'missing'. True to replace with 0,
             False to replace with nan.
-        debug : bool, optional (default: False)
-            If True, stops after fetching timeseries data from api; before applying the
-            aftercare functions.
+        output_as_series : bool, optional (default: False)
+            If True, stops after fetching timeseries data from api, and return those as
+            series, list of series, or nested dictionary.
 
         Returns
         -------
@@ -210,10 +213,11 @@ class Tenant:
         # Get ts tree and fetch data.
         ts_tree = Ts(pfid, tsname)
         self._fetch_series(ts_tree, ts_left, ts_right, missing2zero=missing2zero)
-        if debug:
-            return ts_tree
+        series_tree = to_series_tree(ts_tree, self.aftercare)
+        if output_as_series:
+            return series_tree
         # Turn into portfolio line.
-        return self._pfline(ts_tree)
+        return self._pfline(series_tree)  # TODO
 
     def portfolio_pfl(
         self,
@@ -223,7 +227,7 @@ class Tenant:
         ts_right: pd.Timestamp,
         missing2zero: bool = True,
         *,
-        debug: bool = False,
+        output_as_series: bool = False,
     ) -> pf.PfLine:
         """Retrieve a portfolio line with portfolio-specific volume and/or price data
         from Belvis.
@@ -241,9 +245,9 @@ class Tenant:
         missing2zero : bool, optional (default: True)
             What to do with values that are flagged as 'missing'. True to replace with 0,
             False to replace with nan.
-        debug : bool, optional (default: False)
-            If True, stops after fetching timeseries data from api; before applying the
-            aftercare functions.
+        output_as_series : bool, optional (default: False)
+            If True, stops after fetching timeseries data from api, and return those as
+            series, list of series, or nested dictionary.
 
         Returns
         -------
@@ -255,10 +259,12 @@ class Tenant:
             ts_tree = self.structure.tstree_pfline(pfid, pflineid)
             self._fetch_series(ts_tree, ts_left, ts_right, missing2zero=missing2zero)
             ts_trees.append(ts_tree)
-        if debug:
-            return ts_trees
+        # Turn into series.
+        series_trees = [to_series_tree(ts_tree) for ts_tree in ts_trees]
+        if output_as_series:
+            return series_trees
         # Turn into portfolio line.
-        return sum([self._pfline(ts_tree) for ts_tree in ts_trees], None)
+        return sum([self._pfline(series_tree) for series_tree in series_trees], None)
 
     def price_pfl(
         self,
@@ -267,7 +273,7 @@ class Tenant:
         ts_right: pd.Timestamp,
         missing2zero: bool = True,
         *,
-        debug: bool = False,
+        output_as_series: bool = False,
     ) -> pf.PfLine:
         """Retrieve a portfolio line with portfolio-UNspecific price data from Belvis.
 
@@ -282,6 +288,9 @@ class Tenant:
         missing2zero : bool, optional (default: True)
             What to do with values that are flagged as 'missing'. True to replace with 0,
             False to replace with nan.
+        output_as_series : bool, optional (default: False)
+            If True, stops after fetching timeseries data from api, and return those as
+            series, list of series, or nested dictionary.
 
         Returns
         -------
@@ -290,7 +299,46 @@ class Tenant:
         # Get ts trees and fetch data.
         ts_tree = self.structure.tstree_price(priceid)
         self._fetch_series(ts_tree, ts_left, ts_right, missing2zero=missing2zero)
-        if debug:
-            return ts_tree
+        series_tree = to_series_tree(ts_tree, self.aftercare)
+        if output_as_series:
+            return series_tree
         # Turn into portfolio line.
-        return self._pfline(ts_tree)
+        return self._pfline(series_tree)
+
+
+def to_series_tree(ts_tree: TsTree, aftercare: Aftercare) -> SeriesTree:
+    """Apply aftercare function and sum by dimension."""
+    # NestedPfLine.
+
+    if isinstance(ts_tree, Dict):  # nested
+        ts_dict = ts_tree
+        return {name: to_series_tree(subtree) for name, subtree in ts_dict.items()}
+
+    # FlatPfLine.
+
+    elif isinstance(ts_tree, Ts):  # one series
+        ts = ts_tree
+        return apply_aftercare(ts, aftercare)
+
+    else:  # list of series
+        tss = ts_tree
+        return sum_same_dimensionality([apply_aftercare(ts, aftercare) for ts in tss])
+
+
+def apply_aftercare(ts: Ts, aftercare: Aftercare) -> pd.Series:
+    if aftercare:
+        return aftercare(ts.series, ts.tsid, ts.pfid, ts.name)
+    else:
+        return ts.series
+
+
+def sum_same_dimensionality(series: Iterable[pd.Series]) -> List[pd.Series]:
+    """Condense a collection of series by summing the ones with the same pint unit.
+    The series in the returned list all have a different dimensionality."""
+    series_by_dimension = defaultdict(list)
+    for s in series:
+        # Sort by dimensionality.
+        dim = s.pint.dimensionality
+        series_by_dimension[dim].append(s)
+    # Sum to get one series per dimension.
+    return [sum(s) for s in series_by_dimension.values()]
