@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "belvys"
+version = "0.2.6"
+description = "Package to fetch data through the REST API of energy portfolio management software \"Belvis\"."
+authors = ["rwijtvliet <rwijtvliet@gmail.com>"]
+license = "BSD-3"
+readme = "README.rst"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pyyaml = "^6.0.1"
+pandas = "^2.1.0"
+numpy = "^1.25.2"
+requests = "^2.31.0"
+tqdm = "^4.66.1"
+portfolyo = "^0.5"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.7.0"
+flake8 = "^6.1.0"
+twine = "^4.0.2"
+pre-commit = "^3.4.0"
+
+
+[tool.poetry.group.test.dependencies]
+pytest = "^7.4.1"
+pytest-cov = "^4.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,7 +1,9 @@
 """Getting data from Kisters' portfolio management system 'Belvis'."""
 
-from . import _version, adjustment
-from .api import Api
+import importlib.metadata
+
+from . import adjustment  # noqa
+from .api import Api  # noqa
 from .example import (
     example_api,
     example_api_to_file,
@@ -11,4 +13,4 @@ from .example import (
 from .structure import Structure, Ts, TsTree
 from .tenant import Tenant
 
-__version__ = _version.get_versions()["version"]
+__version__ = importlib.metadata.version(__package__ or __name__)

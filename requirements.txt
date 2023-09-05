@@ -1,8 +1,0 @@
-PyYAML
-pandas
-numpy
-requests
-tqdm
-portfolyo>=0.5,<0.6
-python-forge
-versioneer
