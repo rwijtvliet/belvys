@@ -15,6 +15,7 @@ tqdm = "^4.66.1"
 portfolyo = "^0.5"
 
 [tool.poetry.group.dev.dependencies]
+python = "^3.9 <3.12"
 black = "^23.7.0"
 flake8 = "^6.1.0"
 twine = "^4.0.2"
