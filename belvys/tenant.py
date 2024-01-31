@@ -260,7 +260,7 @@ class Tenant:
             self._fetch_series(ts_tree, ts_left, ts_right, missing2zero=missing2zero)
             ts_trees.append(ts_tree)
         # Turn into series.
-        series_trees = [to_series_tree(ts_tree) for ts_tree in ts_trees]
+        series_trees = [to_series_tree(ts_tree, self.aftercare) for ts_tree in ts_trees]
         if output_as_series:
             return series_trees
         # Turn into portfolio line.
@@ -312,7 +312,10 @@ def to_series_tree(ts_tree: TsTree, aftercare: Aftercare) -> SeriesTree:
 
     if isinstance(ts_tree, Dict):  # nested
         ts_dict = ts_tree
-        return {name: to_series_tree(subtree) for name, subtree in ts_dict.items()}
+        return {
+            name: to_series_tree(subtree, aftercare)
+            for name, subtree in ts_dict.items()
+        }
 
     # FlatPfLine.
 
