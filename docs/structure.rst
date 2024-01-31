@@ -38,10 +38,13 @@ We can initialise a ``Structure`` instance by specifying the initialisation para
 
 See the class documentation, below, for an explanation of the meaning of these parameters. 
 
-Alternatively, the specification can be stored in a ``yaml`` file, and used to initialise the class using the ``belvys.Structure.from_file()`` class method. Here is the corresponding file, which includes some comments for better understanding the format: 
+Alternatively, the specification can be stored in a ``yaml`` file, and used to initialise the class using the ``belvys.Structure.from_file()`` class method. Here is the file corresponding to the configuration above. It includes some comments for better understanding the format:
 
 .. literalinclude:: ../belvys/example_structure_basic.yaml
    :language: yaml
+   
+(:download:`download yaml 📄<../belvys/example_structure_basic.yaml>`)
+
 
 -----
 Usage
@@ -90,11 +93,12 @@ When the instance has been created, several methods tell us which data we expect
 Complex example
 ---------------
 
-The example shown above is a basic one. Here is a more complex example file, which shows all possibilities to specify a ``Structure``.
+The example shown above is a basic one. Here is a more complex example file, which shows all possibilities to specify a ``Structure``:
 
 .. literalinclude:: ../belvys/example_structure_complex.yaml
    :language: yaml
-
+   
+(:download:`download yaml 📄<../belvys/example_structure_complex.yaml>`)
 
 -------------------
 Class Documentation
