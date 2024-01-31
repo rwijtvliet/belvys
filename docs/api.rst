@@ -20,6 +20,8 @@ We can also initialise from a configuration file, with the ``belvys.Api.from_fil
 .. literalinclude:: ../belvys/example_api_basic.yaml
    :language: yaml
 
+(:download:`download yaml 📄<../belvys/example_api_basic.yaml>`)
+
 --------------
 Authentication
 --------------
