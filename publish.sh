@@ -1,4 +1,4 @@
-#!usr/bin/env bash
+#!/usr/bin/env bash
 
 set -e
 
@@ -8,7 +8,7 @@ version=$(poetry version --short)
 service=$(poetry version | cut -d ' ' -f1)
 service_version="$service-$version"
 
-message="Release Service: $service_version"
+message="Release Service: $version"
 echo $message
 
 if [ "$current_branch" != "master" ]
@@ -19,5 +19,5 @@ if [ "$current_branch" != "master" ]
     exit -1 
 fi
 
-git tag -a $service_version -m "$message"
-git push origin $service_version
+git tag -a $version -m "$message"
+git push origin $version
