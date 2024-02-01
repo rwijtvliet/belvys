@@ -76,7 +76,7 @@ Before creating a pull request:
 Publishing
 ----------
 
-To publish the current state of ``master``, run the ``publish.sh`` script. It will create a tag from the version number, which triggers the publish action on github. (The version number must be unequal to a previous tag, which is automatically true if the development is only done in feature branches, and every feature branche increases the version number. )
+To publish the current state of ``master``, run the ``create_tag.sh`` script. It will create a tag from the version number and push it to github. (The version number must be unequal to a previous tag, which is automatically true if the development is only done in feature branches, and every feature branch increases the version number.) On github, a release can be drafted from the tag.
 
    
 Disclaimer

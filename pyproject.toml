@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "belvys"
-version = "0.2.7"
+version = "0.2.8"
 description = "Package to fetch data through the REST API of energy portfolio management software \"Belvis\"."
 authors = ["rwijtvliet <rwijtvliet@gmail.com>"]
 license = "BSD-3"
