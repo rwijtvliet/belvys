@@ -17,18 +17,18 @@ Belvys
     :target: https://belvys.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
 
-Package to fetch data through the REST API of energy portfolio management software "Belvis".
+Belvys is a package to fetch data through the REST API of energy portfolio management software "Belvis".
 
-------------
 Installation
 ------------
 
 .. code-block:: bash
 
    pip install belvys
+   
+Or add it to ``pyproject.toml``.
 
 
--------------
 Documentation
 -------------
 
@@ -46,7 +46,6 @@ The package defines 3 classes: ``Tenant``, which is the main class, and ``Struct
 * The ``Api`` class is used to query the belvis Api and retrieve data, including the authentication part.
 
 
-----------
 Repository
 ----------
 
@@ -55,23 +54,32 @@ The git repository is hosted on github:
 http://www.github.com/rwijtvliet/belvys
 
 
-----------
 Developing
 ----------
 
-This project uses ``black`` to format code and ``flake8`` for linting. We also support ``pre-commit`` to ensure
-these have been run. To configure your local environment please install these development dependencies and set up
-the commit hooks.
+This project uses ``black`` to format code and ``flake8`` for linting. We also support ``pre-commit`` to ensure these have been run. To configure your local environment please install these development dependencies and set up the commit hooks.
 
 .. code-block:: bash
 
-   $ pip install -r requirements-dev.txt
-   $ pre-commit install
+   poetry install --with dev,test
+   pre-commit install
 
+Development is done on feature branches, which are merged back into ``master`` via pull request.
 
+Before creating a pull request:
+
+* Merge the current state of ``master`` into the feature branch;
+
+* Increase the version number (by running ``poetry version major|minor|patch``) of the feature branch.
+
+   
+Publishing
 ----------
+
+To publish the current state of ``master``, run the ``publish.sh`` script. It will create a tag from the version number, which triggers the publish action on github. (The version number must be unequal to a previous tag, which is automatically true if the development is only done in feature branches, and every feature branche increases the version number. )
+
+   
 Disclaimer
 ----------
-
 
 This package interacts with the Belvis software which is delevoped by Kisters. This package is not written by, maintained by, or associated with Kisters in any way.
