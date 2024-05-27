@@ -429,8 +429,8 @@ class Api:
         self,
         pfid: str,
         tsname: str,
-        ts_left: pd | Timestamp | dt.datetime,
-        ts_right: pd | Timestamp | dt.datetime,
+        ts_left: pd.Timestamp | dt.datetime,
+        ts_right: pd.Timestamp | dt.datetime,
         *,
         leftrange: str = "exclusive",
         rightrange: str = "inclusive",
@@ -446,8 +446,8 @@ class Api:
             ID (=short name) of portfolio in Belvis.
         tsname : str
             Name of the timeseries. Must be exact.
-        ts_left : pd | Timestamp | dt.datetime
-        ts_right : pd | Timestamp | dt.datetime
+        ts_left : pd.Timestamp | dt.datetime
+        ts_right : pd.Timestamp | dt.datetime
         leftrange : str, optional (default: 'exclusive')
             'inclusive' ('exclusive') to get values with timestamp that is >= (>) ts_left.
             Default: 'exclusive' because timestamps in Belvis are *usually* right-bound.
