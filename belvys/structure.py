@@ -2,12 +2,12 @@ from __future__ import annotations
 
 import pathlib
 from dataclasses import dataclass, field
-from typing import Any, Dict, Iterable, Union
+from typing import Any, Dict, Iterable
 
 import pandas as pd
 import yaml
 
-TsNameTree = Union[str, Iterable[str], Dict[str, "TsNameTree"]]
+TsNameTree = str | Iterable[str] | Dict[str, "TsNameTree"]
 
 
 @dataclass
@@ -18,7 +18,7 @@ class Ts:
     series: pd.Series = None
 
 
-TsTree = Union[Ts, Iterable[Ts], Dict[str, "TsTree"]]
+TsTree = Ts | Iterable[Ts] | Dict[str, "TsTree"]
 
 
 def create_tstree(pfid: str, tsname_tree: TsNameTree) -> TsTree:
@@ -35,7 +35,7 @@ def create_tstree(pfid: str, tsname_tree: TsNameTree) -> TsTree:
 @dataclass(frozen=True)
 class Portfolios:
     original: Iterable[str]
-    synthetic: Dict[str, Union[str, Iterable[str]]] = field(default_factory=dict)
+    synthetic: Dict[str, str | Iterable[str]] = field(default_factory=dict)
 
     def __post_init__(self):
         # Assert that the class doesn't have missing refences.
@@ -95,7 +95,7 @@ class Structure:
         Dictionary with string keys (=price ids), which map onto a dictionary that has
         the keys 'pfid' (which has the id of the portfolio as its value) and 'tsnames'
         (which has a (list of) timeseries names as its value).
-    corrections : Dict[str, Dict[str, Union[TsNameTree, None]]]
+    corrections : Dict[str, Dict[str, TsNameTree | None]]
         If not all pflines can be found in all portfolios, we can specify this here.
 
         - If a portfolio has a pfline that is not found in the others (and therefore not
@@ -115,9 +115,7 @@ class Structure:
     pflines: Dict[str, TsNameTree]
     portfolios: Portfolios
     prices: Dict[str, Dict[str, Any]]
-    corrections: Dict[str, Dict[str, Union[TsNameTree, None]]] = field(
-        default_factory=dict
-    )
+    corrections: Dict[str, Dict[str, TsNameTree | None]] = field(default_factory=dict)
 
     def _expand_tree(self, tsname_tree: TsNameTree) -> TsNameTree:
         """Check if tree refers to existing value, and replace if yes."""
@@ -163,12 +161,12 @@ class Structure:
             )
 
     @classmethod
-    def from_file(cls, filepath: Union[str, pathlib.Path]) -> Structure:
+    def from_file(cls, filepath: str | pathlib.Path) -> Structure:
         """Load structure from file.
 
         Parameters
         ----------
-        filepath : Union[str, pathlib.Path]
+        filepath : str | pathlib.Path
             Path to load yaml structure file from.
         """
         conf_yml = yaml.load(open(filepath), Loader=yaml.FullLoader)

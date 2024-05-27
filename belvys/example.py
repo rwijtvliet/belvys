@@ -1,6 +1,5 @@
 import pathlib
 import shutil
-from typing import Union
 
 from .api import Api
 from .structure import Structure
@@ -15,7 +14,7 @@ def _example_filepath(obj: str, which: str) -> pathlib.Path:
     return path
 
 
-def _checked_filepath(filepath: Union[str, pathlib.Path]) -> pathlib.Path:
+def _checked_filepath(filepath: str | pathlib.Path) -> pathlib.Path:
     """Correct and check filepath."""
     if isinstance(filepath, str):
         filepath = pathlib.Path(filepath)
@@ -57,13 +56,13 @@ def example_api(which: str = "basic") -> Api:
 
 
 def example_structure_to_file(
-    filepath: Union[str, pathlib.Path], which: str = "basic"
+    filepath: str | pathlib.Path, which: str = "basic"
 ) -> None:
     """Save an example of a structure configuration to file.
 
     Parameters
     ----------
-    path : Union[str, pathlib.Path]
+    path : str | pathlib.Path
         Path to save the file to.
     which : {'basic' (default), 'complex'}
         Which example to save.
@@ -71,14 +70,12 @@ def example_structure_to_file(
     shutil.copy(_example_filepath("structure", which), _checked_filepath(filepath))
 
 
-def example_api_to_file(
-    filepath: Union[str, pathlib.Path], which: str = "basic"
-) -> None:
+def example_api_to_file(filepath: str | pathlib.Path, which: str = "basic") -> None:
     """Save an example of an api configuration to file.
 
     Parameters
     ----------
-    path : Union[str, pathlib.Path]
+    path : str | pathlib.Path
         Path to save the file to.
     which : {'basic' (default), 'complex'}
         Which example to save.

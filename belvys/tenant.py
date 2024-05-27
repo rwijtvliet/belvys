@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import Dict, Iterable, List, Union
+from typing import Dict, Iterable, List
 
 import pandas as pd
 import portfolyo as pf
@@ -10,7 +10,7 @@ from .api import Api
 from .common import print_status
 from .structure import Structure, Ts, TsTree
 
-SeriesTree = Union[pd.Series, Iterable[pd.Series], Dict[str, "SeriesTree"]]
+SeriesTree = pd.Series | Iterable[pd.Series] | Dict[str, "SeriesTree"]
 
 
 def fact_default_aftercare(tz) -> Aftercare:
@@ -133,9 +133,9 @@ class Tenant:
 
             # Turn all revenue-only pflines into complete pflines.
             children = {
-                name: child | pf.Q_(0.0, "MW")
-                if child.kind is pf.Kind.REVENUE
-                else child
+                name: (
+                    child | pf.Q_(0.0, "MW") if child.kind is pf.Kind.REVENUE else child
+                )
                 for name, child in children.items()
             }
             return pf.PfLine(children)

@@ -7,7 +7,7 @@ import json
 import pathlib
 import urllib
 from dataclasses import dataclass
-from typing import Callable, Dict, List, Union
+from typing import Callable, Dict, List
 
 import numpy as np
 import pandas as pd
@@ -74,12 +74,12 @@ class Api:
     __slots__ = ["_retry", "_server", "_tenant", "_cache", "_filepath", "_access"]
 
     @classmethod
-    def from_file(cls, filepath: Union[str, pathlib.Path]) -> Api:
+    def from_file(cls, filepath: str | pathlib.Path) -> Api:
         """Load api data from file.
 
         Parameters
         ----------
-        filepath : Union[str, pathlib.Path]
+        filepath : str | pathlib.Path
             Path to load yaml api configuration from. Also the path to save api configuration
             (which includes the cache).
 
@@ -202,7 +202,7 @@ class Api:
         if self.filepath is not None:
             self.to_file(self.filepath)
 
-    def query(self, url: str) -> Union[Dict, List]:
+    def query(self, url: str) -> Dict | List:
         """Query connection for general information."""
         try:
             response = self.access.request(url)
@@ -361,8 +361,8 @@ class Api:
     def series(
         self,
         tsid: int,
-        ts_left: Union[pd.Timestamp, dt.datetime],
-        ts_right: Union[pd.Timestamp, dt.datetime],
+        ts_left: pd.Timestamp| dt.datetime,
+        ts_right: pd.Timestamp| dt.datetime,
         *,
         leftrange: str = "exclusive",
         rightrange: str = "inclusive",
@@ -375,8 +375,8 @@ class Api:
         ----------
         tsid : int
             Belvis id of timeseries.
-        ts_left : Union[pd.Timestamp, dt.datetime]
-        ts_right : Union[pd.Timestamp, dt.datetime]
+        ts_left : pd.Timestamp | dt.datetime
+        ts_right : pd.Timestamp | dt.datetime
         leftrange : str, optional (default: 'exclusive')
             'inclusive' ('exclusive') to get values with timestamp that is >= (>) ts_left.
             Default: 'exclusive' because timestamps in Belvis are *usually* right-bound.
@@ -429,8 +429,8 @@ class Api:
         self,
         pfid: str,
         tsname: str,
-        ts_left: Union[pd.Timestamp, dt.datetime],
-        ts_right: Union[pd.Timestamp, dt.datetime],
+        ts_left: pd |Timestamp, dt.datetime,
+        ts_right: pd |Timestamp, dt.datetime,
         *,
         leftrange: str = "exclusive",
         rightrange: str = "inclusive",
@@ -446,8 +446,8 @@ class Api:
             ID (=short name) of portfolio in Belvis.
         tsname : str
             Name of the timeseries. Must be exact.
-        ts_left : Union[pd.Timestamp, dt.datetime]
-        ts_right : Union[pd.Timestamp, dt.datetime]
+        ts_left : pd |Timestamp, dt.datetime
+        ts_right : pd |Timestamp, dt.datetime
         leftrange : str, optional (default: 'exclusive')
             'inclusive' ('exclusive') to get values with timestamp that is >= (>) ts_left.
             Default: 'exclusive' because timestamps in Belvis are *usually* right-bound.
