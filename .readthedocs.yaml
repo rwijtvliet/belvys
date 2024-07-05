@@ -11,7 +11,7 @@ build:
       # Install dependencies with 'docs' dependency group
       # https://python-poetry.org/docs/managing-dependencies/#dependency-groups
       - poetry export -f requirements.txt --without-hashes --without-urls --with docs -o requirements.txt
-      - pip install -e . # -r requirements.txt
+      - pip install -e . -r requirements.txt
       #- pip list
     #post_create_environment:
     #   # Install poetry
