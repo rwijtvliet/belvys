@@ -6,6 +6,7 @@ import datetime as dt
 import json
 import pathlib
 import urllib
+from builtins import NotImplementedError
 from dataclasses import dataclass
 from typing import Callable, Dict, List
 
@@ -27,7 +28,7 @@ def create_url(server: str, path: str, *queryparts: str) -> str:
 
 @dataclass
 class Access:
-    # Zero-parameter function to authorize with server.
+    # Zero-parameter function to authorize with server, which raises Error if unsuccessful.
     authenticate: Callable[[]]
     # Function used to fetch data from the server.
     request: Callable[[str], requests.request]
@@ -66,6 +67,12 @@ class Access:
             return session.get(url)
 
         return cls(auth, req)
+
+    @classmethod
+    def from_token(cls, server: str, tenant: str, token) -> Access:
+        raise NotImplementedError(
+            "This authentication method has not yet been implemented."
+        )
 
 
 class Api:
